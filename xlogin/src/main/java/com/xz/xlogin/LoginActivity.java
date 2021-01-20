@@ -13,9 +13,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.orhanobut.logger.Logger;
+import com.xz.xlogin.content.Local;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.base.BaseActivity;
-import com.xz.xlogin.content.Local;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.fragment.LoginFragment;
 import com.xz.xlogin.fragment.RegisterFragment;
@@ -68,9 +68,6 @@ public class LoginActivity extends BaseActivity {
 		setActionBarTitleColor(getColor(R.color.colorPrimary));
 		setActionBarBackColor(getColor(R.color.colorPrimary));
 		changeStatusBarTextColor();
-		Logger.init("xzlyf")    //LOG TAG默认是PRETTYLOGGER
-				.methodCount(2)                 // 决定打印多少行（每一行代表一个方法）默认：2
-				.methodOffset(0);
 		initView();
 		userApi = UserApi.getInstance();
 		getProtocol();
