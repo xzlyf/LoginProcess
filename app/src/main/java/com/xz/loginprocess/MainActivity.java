@@ -2,18 +2,23 @@ package com.xz.loginprocess;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.xz.xlogin.LoginActivity;
 import com.xz.xlogin.XLogin;
 
 public class MainActivity extends AppCompatActivity {
+
+	private TextView tvToken;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		tvToken = findViewById(R.id.tv_token);
+
 		/*
 		 * 初始化
 		 */
@@ -29,8 +34,20 @@ public class MainActivity extends AppCompatActivity {
 		/*
 		 *调用登录程序
 		 */
-		startActivity(new Intent(this, LoginActivity.class));
-
-
+		//startActivity(new Intent(this, LoginActivity.class));
+		XLogin.login(this);
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == XLogin.REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				tvToken.setText("token:" + data.getStringExtra(XLogin.EXTRA_TOKEN));
+			} else if (resultCode == RESULT_CANCELED) {
+				tvToken.setText("登录被终止");
+			}
+		}
+	}
+
 }

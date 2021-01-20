@@ -1,7 +1,7 @@
 package com.xz.xlogin.api;
 
 import com.orhanobut.logger.Logger;
-import com.xz.xlogin.content.Local;
+import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.util.RSAUtil;
@@ -43,8 +43,8 @@ public class UserApi {
 	 */
 	public void getUserRules(NetUtil.ResultCallback<ApiResult<String>> callback) {
 		Map<String,Object> params = new HashMap<>();
-		params.put("appid", Local.appId);
-		netUtil.get_public(Local.BASE_URL_INFO + Local.GET_USER_RULE, params, callback);
+		params.put("appid", Macroelement.appId);
+		netUtil.get_public(Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE, params, callback);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class UserApi {
 
 		Map<String, Object> params = new HashMap<>();
 		try {
-			params.put("password", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Local.publicKey)));
+			params.put("password", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
 			//params.put("password", pwd);
 
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -64,7 +64,7 @@ public class UserApi {
 			return;
 		}
 		params.put("phone", phone);
-		netUtil.get(Local.BASE_URL_USER + Local.GET_REGISTER, params, callback);
+		netUtil.get(Macroelement.BASE_URL_USER + Macroelement.GET_REGISTER, params, callback);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class UserApi {
 		params.put("type", type);
 		try {
 			//密码规则=明文密码+时间戳
-			params.put("password", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Local.publicKey)));
+			params.put("password", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Macroelement.publicKey)));
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 			Logger.e("RSA运算错误");
@@ -87,7 +87,7 @@ public class UserApi {
 			return;
 		}
 
-		netUtil.post(timestamp, Local.BASE_URL_USER + Local.GET_LOGIN, params, callback);
+		netUtil.post(timestamp, Macroelement.BASE_URL_USER + Macroelement.GET_LOGIN, params, callback);
 	}
 
 

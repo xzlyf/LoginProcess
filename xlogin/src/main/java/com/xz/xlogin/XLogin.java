@@ -1,9 +1,12 @@
 package com.xz.xlogin;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.orhanobut.logger.Logger;
-import com.xz.xlogin.content.Local;
+import com.xz.xlogin.constant.Macroelement;
 
 /**
  * @author czr
@@ -12,18 +15,32 @@ import com.xz.xlogin.content.Local;
  */
 public class XLogin {
 
+	public static final int REQUEST_CODE = 0x0001212;
+	public static final String EXTRA_TOKEN = "token";
 
 	public static void init(XLoginBuilder builder) {
 		if (builder.isLog) {
 			log(builder.logTag);
 		}
-		Local.appId = builder.appId;
-		Local.appSecret = builder.appSecret;
-		Local.version = builder.version;
-		Local.publicKey = builder.publicKey;
-		Local.BASE_URL_USER = Local.SERVER + Local.alt_user;
-		Local.BASE_URL_TODO = Local.SERVER + Local.alt_todolist;
-		Local.BASE_URL_INFO = Local.SERVER + Local.alt_appinfo;
+		Macroelement.appId = builder.appId;
+		Macroelement.appSecret = builder.appSecret;
+		Macroelement.version = builder.version;
+		Macroelement.publicKey = builder.publicKey;
+		Macroelement.SERVER = builder.server;
+		Macroelement.BASE_URL_USER = Macroelement.SERVER + Macroelement.alt_user;
+		Macroelement.BASE_URL_TODO = Macroelement.SERVER + Macroelement.alt_todolist;
+		Macroelement.BASE_URL_INFO = Macroelement.SERVER + Macroelement.alt_appinfo;
+
+	}
+
+	/**
+	 * 前往登录页面
+	 * 通过onActivityResult来获取回调信息
+	 * RESULT_OK 会携带token
+	 */
+	public static void login(Activity activity) {
+		//activity.startActivity(new Intent(activity, LoginActivity.class));
+		activity.startActivityForResult(new Intent(activity, LoginActivity.class), REQUEST_CODE);
 
 	}
 
@@ -106,6 +123,18 @@ public class XLogin {
 		public XLoginBuilder build() {
 			return this;
 		}
+	}
+
+
+	/**
+	 * 登录回调
+	 */
+	public interface LoginCallback {
+		void onLogin(Intent intent);
+
+		void onCancel(Intent intent);
+
+		void onError(Exception e);
 	}
 
 }

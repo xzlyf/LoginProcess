@@ -1,7 +1,7 @@
 package com.xz.xlogin.network;
 
 import com.xz.utils.encodUtils.MD5Util;
-import com.xz.xlogin.content.Local;
+import com.xz.xlogin.constant.Macroelement;
 
 /**
  * @author czr
@@ -16,6 +16,6 @@ public class SecretUtil {
 	 * @param timestamp 时间戳
 	 */
 	public static String getSecret(long timestamp) {
-		return MD5Util.getMD5(Local.appId + Local.appSecret + timestamp + Local.version);
+		return MD5Util.getMD5(Macroelement.appId + Macroelement.appSecret + timestamp + Macroelement.version);
 	}
 }

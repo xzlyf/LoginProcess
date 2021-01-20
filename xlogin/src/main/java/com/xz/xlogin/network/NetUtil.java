@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.internal.$Gson$Types;
 import com.orhanobut.logger.Logger;
-import com.xz.xlogin.content.Local;
+import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.util.DateFormat;
 
 import java.io.IOException;
@@ -357,9 +357,9 @@ public class NetUtil {
 	 */
 	private Request buildGetRequest(long timestamp, String url, Map<String, Object> params) {
 		return new Request.Builder()
-				.addHeader("appid", Local.appId)
+				.addHeader("appid", Macroelement.appId)
 				.addHeader("timestamp", String.valueOf(timestamp))
-				.addHeader("version", Local.version)
+				.addHeader("version", Macroelement.version)
 				.addHeader("sign", SecretUtil.getSecret(timestamp))
 				.url(attachHttpGetParams(url, params, true))
 				.build();
@@ -378,9 +378,9 @@ public class NetUtil {
 		}
 		RequestBody requestBody = builder.build();
 		return new Request.Builder()
-				.addHeader("appid", Local.appId)
+				.addHeader("appid", Macroelement.appId)
 				.addHeader("timestamp", String.valueOf(timestamp))
-				.addHeader("version", Local.version)
+				.addHeader("version", Macroelement.version)
 				.addHeader("sign", SecretUtil.getSecret(timestamp))
 				.url(url)
 				.post(requestBody)

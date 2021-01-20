@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.orhanobut.logger.Logger;
-import com.xz.xlogin.content.Local;
+import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.base.BaseActivity;
 import com.xz.xlogin.entity.ApiResult;
@@ -157,7 +157,7 @@ public class LoginActivity extends BaseActivity {
 		}
 	};
 
-	private void onViewClick(View v){
+	private void onViewClick(View v) {
 		int id = v.getId();
 		if (id == R.id.tv_protocol) {
 			startActivity(
@@ -217,8 +217,11 @@ public class LoginActivity extends BaseActivity {
 
 					switch (code) {
 						case 1:
-							Local.token = obj.optString("data");
-							sToast("登录成功");
+							Macroelement.token = obj.optString("data");
+							Intent intent = new Intent();
+							intent.putExtra(XLogin.EXTRA_TOKEN, Macroelement.token);
+							setResult(RESULT_OK, intent);
+							finish();
 							break;
 						case 1049:
 						case 1050:
@@ -318,4 +321,11 @@ public class LoginActivity extends BaseActivity {
 	}
 
 
+	@Override
+	protected void onDestroy() {
+		if (Macroelement.token == null) {
+			setResult(RESULT_CANCELED);
+		}
+		super.onDestroy();
+	}
 }

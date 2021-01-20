@@ -1,4 +1,4 @@
-package com.xz.xlogin.content;
+package com.xz.xlogin.constant;
 
 /**
  * @author czr
@@ -6,7 +6,7 @@ package com.xz.xlogin.content;
  * @date 2020/12/9
  */
 
-public class Local {
+public class Macroelement {
 
 	public static String SERVER = "";//本地tomcat
 	//public static String SERVER = "https://192.168.1.66";//IDEA spring boot 测试
@@ -17,9 +17,9 @@ public class Local {
 	public static String alt_todolist = "/todolist";
 	public static String alt_appinfo = "/appinfo";
 
-	public static String BASE_URL_USER = Local.SERVER + Local.alt_user;
-	public static String BASE_URL_TODO = Local.SERVER + Local.alt_todolist;
-	public static String BASE_URL_INFO = Local.SERVER + Local.alt_appinfo;
+	public static String BASE_URL_USER;
+	public static String BASE_URL_TODO;
+	public static String BASE_URL_INFO;
 
 	//接口
 	public static final String GET_USER_RULE = "/getUserRules";//获取隐私协议
@@ -36,6 +36,5 @@ public class Local {
 	public static String publicKey;
 
 	//用户token
-	//public static String token ="CDCBFBF02B9E9335FE203E92944B9DB3";
 	public static String token;
 }
