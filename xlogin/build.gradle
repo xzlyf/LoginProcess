@@ -43,6 +43,8 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    api 'com.squareup.okhttp3:okhttp:3.14.4'
+    api 'com.squareup.okio:okio:2.2.2'
     //json
     api 'com.ljx.rxhttp:converter-jackson:2.2.0'
     api 'com.ljx.rxhttp:converter-fastjson:2.2.0'
@@ -53,7 +55,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
     //经过修改的apache codes包，因为Base64会与安卓的Base64冲突，这个包修改了包名
-    api files('libs/commons-codes-android-1.15.jar')
-    //下拉刷新 github:https://github.com/lcodecorex/TwinklingRefreshLayout/blob/master/README_CN.md
-    api 'com.lcodecorex:tkrefreshlayout:1.0.7'
+//    api files('libs/commons-codes-android-1.15.jar')
+
+
 }

@@ -1,6 +1,7 @@
 package com.xz.xlogin.util;
 
-import org.apache.commons.android.codec.binary.Base64;
+import com.xz.xlogin.util.apache.codes.binary.Base64;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;

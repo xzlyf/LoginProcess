@@ -67,6 +67,9 @@ public class LoginActivity extends BaseActivity {
 		setActionBarColor(Color.TRANSPARENT);
 		setActionBarTitleColor(getColor(R.color.colorPrimary));
 		setActionBarBackColor(getColor(R.color.colorPrimary));
+		//Logger.init("xzlyf")    //LOG TAG默认是PRETTYLOGGER
+		//		.methodCount(2)                 // 决定打印多少行（每一行代表一个方法）默认：2
+		//		.methodOffset(0);
 		changeStatusBarTextColor();
 		initView();
 		userApi = UserApi.getInstance();
