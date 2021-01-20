@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <layer-list>
+            <!--选中时-->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#E1E1E1" />
+                    <corners android:radius="65dp" />
+                    <stroke android:width="2dp" android:color="@color/colorAccent" />
+
+                </shape>
+            </item>
+
+        </layer-list>
+    </item>
+    <item android:state_focused="false">
+        <layer-list>
+            <!--未选中时-->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#EDEDED" />
+                    <corners android:radius="65dp" />
+                </shape>
+            </item>
+
+        </layer-list>
+    </item>
+</selector>

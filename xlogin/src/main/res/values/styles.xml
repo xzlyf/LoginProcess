@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="InputEditCommonTheme" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:autoLink">none</item>
+        <item name="android:maxLength">225</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/select_edit</item>
+    </style>
+
+</resources>

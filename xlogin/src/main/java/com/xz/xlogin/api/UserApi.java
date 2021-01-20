@@ -1,0 +1,94 @@
+package com.xz.xlogin.api;
+
+import com.orhanobut.logger.Logger;
+import com.xz.xlogin.content.Local;
+import com.xz.xlogin.entity.ApiResult;
+import com.xz.xlogin.network.NetUtil;
+import com.xz.xlogin.util.RSAUtil;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author czr
+ * @email czr2001@outlook.com
+ * @date 2020/12/12
+ * rxhttp使用教程：https://www.cnblogs.com/liujingxing/p/12106117.html
+ */
+public class UserApi {
+	private static final String TAG = UserApi.class.getName();
+	private static UserApi instance;
+	private NetUtil netUtil;
+
+	private UserApi() {
+		netUtil = NetUtil.getInstance();
+	}
+
+	public static UserApi getInstance() {
+		if (instance == null) {
+			synchronized (UserApi.class) {
+				if (instance == null) {
+					instance = new UserApi();
+				}
+			}
+		}
+		return instance;
+	}
+
+	/**
+	 * 获取用户条例地址
+	 * @param callback
+	 */
+	public void getUserRules(NetUtil.ResultCallback<ApiResult<String>> callback) {
+		Map<String,Object> params = new HashMap<>();
+		params.put("appid", Local.appId);
+		netUtil.get_public(Local.BASE_URL_INFO + Local.GET_USER_RULE, params, callback);
+	}
+
+	/**
+	 * 手机注册
+	 */
+	public void phoneRegister(String phone, String pwd, NetUtil.ResultCallback<String> callback) {
+
+		Map<String, Object> params = new HashMap<>();
+		try {
+			params.put("password", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Local.publicKey)));
+			//params.put("password", pwd);
+
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+			Logger.e("RSA运算错误");
+			callback.onError(null, e);
+			return;
+		}
+		params.put("phone", phone);
+		netUtil.get(Local.BASE_URL_USER + Local.GET_REGISTER, params, callback);
+	}
+
+	/**
+	 * 登录
+	 *
+	 * @param type 1-手机登录 2-账号登录 3-token登录
+	 */
+	public void login(int type, String account, String pwd, NetUtil.ResultCallback<String> callback) {
+		long timestamp = System.currentTimeMillis();
+		Map<String, Object> params = new HashMap<>();
+		params.put("account", account);
+		params.put("type", type);
+		try {
+			//密码规则=明文密码+时间戳
+			params.put("password", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Local.publicKey)));
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+			Logger.e("RSA运算错误");
+			callback.onError(null, e);
+			return;
+		}
+
+		netUtil.post(timestamp, Local.BASE_URL_USER + Local.GET_LOGIN, params, callback);
+	}
+
+
+}

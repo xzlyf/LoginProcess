@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xz.xlogin">
+
+    <application
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
+        android:supportsRtl="true">
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="fullUser" />
+        <activity
+            android:name=".WebActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullUser" />
+    </application>
+</manifest>
