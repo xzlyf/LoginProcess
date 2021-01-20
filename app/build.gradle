@@ -37,6 +37,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 //    implementation project(':xlogin') // 添加依赖模块
-    implementation(name: 'xlogin', ext: 'aar')
+    implementation(name: 'xlogin', ext: 'aar')//第三方引入aar方法
 
 }
