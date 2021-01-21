@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
 		/*
 		 * 初始化
+		 * ！！！记得要初始化！！！
 		 */
 		XLogin.init(new XLogin.XLoginBuilder()
 				.log("xzlyf")
