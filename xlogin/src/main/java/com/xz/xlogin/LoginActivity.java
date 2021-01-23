@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.orhanobut.logger.Logger;
+import com.xz.utils.fileUtils.StorageUtil;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.base.BaseActivity;
@@ -22,12 +23,21 @@ import com.xz.xlogin.fragment.RegisterFragment;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.util.ColorUtil;
+import com.xz.xlogin.util.IOUtil;
+import com.xz.xlogin.util.RSAUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
 import com.xz.xlogin.widget.TipsDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import okhttp3.Request;
 
@@ -51,6 +61,14 @@ public class LoginActivity extends BaseActivity {
 	private TextView tvProtocol;
 	private TextView btnSubmit;
 
+	private static final String TAG_TOKEN = "token";
+	private static final String TAG_USER = "user";
+	private static final int TYPE_PHONE = 1;//手机登录
+	private static final int TYPE_NO = 2;//账号登录
+	private static final int TYPE_TOKEN = 3;//token登录
+	private boolean isLoaded = false;
+
+
 	@Override
 	public boolean homeAsUpEnabled() {
 		return true;
@@ -68,14 +86,43 @@ public class LoginActivity extends BaseActivity {
 		setActionBarTitleColor(getColor(R.color.colorPrimary));
 		setActionBarBackColor(getColor(R.color.colorPrimary));
 		changeStatusBarTextColor();
-		initView();
 		userApi = UserApi.getInstance();
-		getProtocol();
-		initFragment();
 
+		if (!autoLogin()) {
+			//如果自动登录失败才初始化fragment等页面
+			initView();
+		}
+	}
+
+	/**
+	 * 执行自动登录
+	 *
+	 * @return false 自动登录失败 true 自动登录成功
+	 */
+	private boolean autoLogin() {
+		String rsaToken = read(TAG_TOKEN);
+		if (rsaToken != null) {
+			String rsaUser = read(TAG_USER);
+			if (rsaUser != null) {
+				String user = null;
+				String token = null;
+				try {
+					// TODO: 2021/1/23 待解决，RSA加解密错误的问题 
+					user = RSAUtil.publicDecrypt(rsaUser, RSAUtil.getPublicKey(Macroelement.publicKey));
+					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.publicKey));
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+				login(user, token, TYPE_TOKEN);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void initView() {
+		isLoaded = true;
 		tvLogin = findViewById(R.id.tv_login);
 		tvRegister = findViewById(R.id.tv_register);
 		mainFragment = findViewById(R.id.main_fragment);
@@ -86,6 +133,9 @@ public class LoginActivity extends BaseActivity {
 		tvLogin.setOnClickListener(onViewClickListener);
 		tvRegister.setOnClickListener(onViewClickListener);
 		btnSubmit.setOnClickListener(onViewClickListener);
+
+		getProtocol();
+		initFragment();
 	}
 
 	private void initFragment() {
@@ -182,7 +232,7 @@ public class LoginActivity extends BaseActivity {
 			}
 			if (type == 0) {
 				//登录
-				phoneLogin();
+				login(loginFragment.getUserNo(), loginFragment.getPwd(), TYPE_PHONE);
 			} else if (type == 1) {
 				//注册
 				phoneRegister();
@@ -193,18 +243,20 @@ public class LoginActivity extends BaseActivity {
 	/**
 	 * 手机号密码登录
 	 */
-	private void phoneLogin() {
-		String phone = loginFragment.getUserNo();
-		String pwd = loginFragment.getPwd();
-		if (phone.equals("") || pwd.equals("")) {
+	private void login(String user, String password, int type) {
+		Macroelement.user = user;
+		if (user.equals("") || password.equals("")) {
 			return;
 		}
 		showLoading("正在登录...");
-		userApi.login(1, phone, pwd, new NetUtil.ResultCallback<String>() {
+		userApi.login(type, user, password, new NetUtil.ResultCallback<String>() {
 			@Override
 			public void onError(Request request, Exception e) {
 				disLoading();
 				TipsDialogUtil.badNetDialog(mContext);
+				if (!isLoaded) {
+					initView();
+				}
 			}
 
 			@Override
@@ -218,6 +270,8 @@ public class LoginActivity extends BaseActivity {
 					switch (code) {
 						case 1:
 							Macroelement.token = obj.optString("data");
+							save(TAG_TOKEN, Macroelement.token);
+							save(TAG_USER, Macroelement.user);
 							Intent intent = new Intent();
 							intent.putExtra(XLogin.EXTRA_TOKEN, Macroelement.token);
 							setResult(RESULT_OK, intent);
@@ -226,9 +280,16 @@ public class LoginActivity extends BaseActivity {
 						case 1049:
 						case 1050:
 						case 1051:
+							if (!isLoaded) {
+								initView();
+							}
 							TipsDialogUtil.commonDialog(mContext, StatusEnum.getValue(code));
+
 							break;
 						default:
+							if (!isLoaded) {
+								initView();
+							}
 							TipsDialogUtil.systemErrorDialog(mContext);
 							break;
 					}
@@ -266,7 +327,6 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onResponse(String response) {
 				disLoading();
-
 				try {
 					JSONObject obj = new JSONObject(response);
 					int code = obj.getInt("code");
@@ -318,6 +378,51 @@ public class LoginActivity extends BaseActivity {
 
 			}
 		});
+	}
+
+
+	private void save(String child, String data) {
+		String path = StorageUtil.getDataDir(mContext);
+		File file = new File(path, child);
+		FileOutputStream fos = null;
+
+		try {
+			if (!file.exists()) {
+				boolean isCreate = file.createNewFile();
+				if (!isCreate) {
+					throw new IOException("File create error");
+				}
+			}
+			String rsa = RSAUtil.publicEncrypt(data, RSAUtil.getPublicKey(Macroelement.publicKey));
+			fos = new FileOutputStream(file);
+			fos.write(rsa.getBytes());
+			fos.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtil.closeAll(fos);
+		}
+
+	}
+
+	private String read(String child) {
+		String path = StorageUtil.getDataDir(mContext);
+		File file = new File(path, child);
+		FileInputStream fis = null;
+		try {
+			if (!file.exists()) {
+				return null;
+			}
+			fis = new FileInputStream(file);
+			byte[] buff = new byte[1024];
+			int len = fis.read(buff);
+			return new String(buff, 0, len);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtil.closeAll(fis);
+		}
+		return null;
 	}
 
 

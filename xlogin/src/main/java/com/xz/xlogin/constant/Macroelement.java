@@ -35,6 +35,8 @@ public class Macroelement {
 	//更新日期：2020/12/03 00:20
 	public static String publicKey;
 
+	//用户账户
+	public static String user;
 	//用户token
 	public static String token;
 }
