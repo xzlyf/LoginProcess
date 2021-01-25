@@ -107,9 +107,8 @@ public class LoginActivity extends BaseActivity {
 				String user = null;
 				String token = null;
 				try {
-					// TODO: 2021/1/23 待解决，RSA加解密错误的问题 
-					user = RSAUtil.publicDecrypt(rsaUser, RSAUtil.getPublicKey(Macroelement.publicKey));
-					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.publicKey));
+					user = RSAUtil.publicDecrypt(rsaUser, RSAUtil.getPublicKey(Macroelement.localPublicKey));
+					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.localPublicKey));
 				} catch (Exception e) {
 					e.printStackTrace();
 					return false;
@@ -262,11 +261,10 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onResponse(String response) {
 				disLoading();
-
+				Logger.w(response);
 				try {
 					JSONObject obj = new JSONObject(response);
 					int code = obj.optInt("code", -1);
-
 					switch (code) {
 						case 1:
 							Macroelement.token = obj.optString("data");
@@ -277,6 +275,7 @@ public class LoginActivity extends BaseActivity {
 							setResult(RESULT_OK, intent);
 							finish();
 							break;
+						case 2:
 						case 1049:
 						case 1050:
 						case 1051:
@@ -284,7 +283,6 @@ public class LoginActivity extends BaseActivity {
 								initView();
 							}
 							TipsDialogUtil.commonDialog(mContext, StatusEnum.getValue(code));
-
 							break;
 						default:
 							if (!isLoaded) {
@@ -393,7 +391,7 @@ public class LoginActivity extends BaseActivity {
 					throw new IOException("File create error");
 				}
 			}
-			String rsa = RSAUtil.publicEncrypt(data, RSAUtil.getPublicKey(Macroelement.publicKey));
+			String rsa = RSAUtil.privateEncrypt(data, RSAUtil.getPrivateKey(Macroelement.localPrivateKey));
 			fos = new FileOutputStream(file);
 			fos.write(rsa.getBytes());
 			fos.flush();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.orhanobut.logger.Logger;
+import com.xz.utils.fileUtils.PreferencesUtil;
 import com.xz.xlogin.constant.Macroelement;
 
 /**
@@ -30,8 +31,8 @@ public class XLogin {
 		Macroelement.BASE_URL_USER = Macroelement.SERVER + Macroelement.alt_user;
 		Macroelement.BASE_URL_TODO = Macroelement.SERVER + Macroelement.alt_todolist;
 		Macroelement.BASE_URL_INFO = Macroelement.SERVER + Macroelement.alt_appinfo;
-
 	}
+
 
 	/**
 	 * 前往登录页面
