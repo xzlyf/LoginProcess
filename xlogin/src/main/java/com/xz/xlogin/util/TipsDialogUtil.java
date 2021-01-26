@@ -79,5 +79,15 @@ public class TipsDialogUtil {
 				.show();
 	}
 
+	public static void commonDialogV2(Context context, String text) {
+		new TipsDialog.Builder(context)
+				.setType(TipsDialog.STYLE_WARN)
+				.setTitle("通知")
+				.setContent(text)
+				.setSubmitText("已知晓")
+				.build()
+				.show();
+	}
+
 
 }

@@ -1,11 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xz.xlogin">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleInstance"
@@ -13,6 +14,7 @@
         <activity
             android:name=".WebActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="fullUser" />
+            android:screenOrientation="fullUser"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 </manifest>
