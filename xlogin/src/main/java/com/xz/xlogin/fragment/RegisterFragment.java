@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.base.BaseFragment;
 
@@ -94,10 +95,12 @@ public class RegisterFragment extends BaseFragment {
 			//如果不可见就设置为可见
 			editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
 			editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+			alterPwd.setImageResource(R.mipmap.ic_invisible);
 		} else {
 			//如果可见就设置为不可见
 			editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 			editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+			alterPwd.setImageResource(R.mipmap.ic_visible);
 		}
 		//执行上面的代码后光标会处于输入框的最前方,所以把光标位置挪到文字的最后面
 		editText.setSelection(editText.getText().toString().length());

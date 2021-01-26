@@ -16,8 +16,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'//默认的混淆文件以及我们指定的混淆文件
+            minifyEnabled false   //开启混淆
+            zipAlignEnabled false  //压缩优化
+            shrinkResources false  //移出无用资源
+
         }
     }
     compileOptions {
