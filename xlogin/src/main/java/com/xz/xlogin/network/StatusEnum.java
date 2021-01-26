@@ -1,9 +1,8 @@
 package com.xz.xlogin.network;
 
 public enum StatusEnum {
-	SUCCESS(0, "success"),
+	SUCCESS(1, "success"),
 	ERROR(-1, "未知错误"),
-	ERROR_PARAMS(1, "参数错误"),
 	//ERROR_TOKEN(2, "token已过期"),
 	ERROR_TOKEN(2, "登录已过期"),
 	ERROR_SIGN_NULL(3, "签名验证不存在"),
@@ -14,6 +13,7 @@ public enum StatusEnum {
 	ERROR_APPID_NULL(8, "缺失AppId参数"),
 	ERROR_APPID_NOTFALL(9, "AppId不存在"),
 	ERROR_SECRET(10, "密钥无效"),
+	ERROR_PARAMS(11, "参数错误"),
 	WORN_UPDATE_VERSION(66, "当前已是最新版本"),
 	WORN_UPDATE_NULL(67, "更新文件错误"),
 	NULL_USER(1045, "用户不存在"),

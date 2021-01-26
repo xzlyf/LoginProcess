@@ -4,12 +4,15 @@ import com.orhanobut.logger.Logger;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
+import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.util.RSAUtil;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Request;
 
 /**
  * @author czr
@@ -39,10 +42,11 @@ public class UserApi {
 
 	/**
 	 * 获取用户条例地址
+	 *
 	 * @param callback
 	 */
 	public void getUserRules(NetUtil.ResultCallback<ApiResult<String>> callback) {
-		Map<String,Object> params = new HashMap<>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("appid", Macroelement.appId);
 		netUtil.get_public(Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE, params, callback);
 	}
@@ -88,6 +92,28 @@ public class UserApi {
 		}
 
 		netUtil.post(timestamp, Macroelement.BASE_URL_USER + Macroelement.GET_LOGIN, params, callback);
+	}
+
+	/**
+	 * 注销登录
+	 */
+	public void logout(String userNo, String token) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("userNo", userNo);
+		params.put("token", token);
+		netUtil.get(Macroelement.BASE_URL_USER + Macroelement.GET_LOGOUT, params, new NetUtil.ResultCallback<ApiResult<String>>() {
+			@Override
+			public void onError(Request request, Exception e) {
+				e.printStackTrace();
+			}
+
+			@Override
+			public void onResponse(ApiResult<String> response) {
+				//不管是否正确的token都可以注销
+				Logger.w("注销提示：" + StatusEnum.getValue(response.getCode()));
+			}
+		});
+
 	}
 
 

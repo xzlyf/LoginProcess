@@ -61,8 +61,7 @@ public class LoginActivity extends BaseActivity {
 	private TextView tvProtocol;
 	private TextView btnSubmit;
 
-	private static final String TAG_TOKEN = "token";
-	private static final String TAG_USER = "user";
+
 	private static final int TYPE_PHONE = 1;//手机登录
 	private static final int TYPE_NO = 2;//账号登录
 	private static final int TYPE_TOKEN = 3;//token登录
@@ -100,9 +99,9 @@ public class LoginActivity extends BaseActivity {
 	 * @return false 自动登录失败 true 自动登录成功
 	 */
 	private boolean autoLogin() {
-		String rsaToken = read(TAG_TOKEN);
+		String rsaToken = XLogin.read(mContext,XLogin.TAG_TOKEN);
 		if (rsaToken != null) {
-			String rsaUser = read(TAG_USER);
+			String rsaUser = XLogin.read(mContext,XLogin.TAG_USER);
 			if (rsaUser != null) {
 				String user = null;
 				String token = null;
@@ -261,15 +260,14 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onResponse(String response) {
 				disLoading();
-				Logger.w(response);
 				try {
 					JSONObject obj = new JSONObject(response);
 					int code = obj.optInt("code", -1);
 					switch (code) {
 						case 1:
 							Macroelement.token = obj.optString("data");
-							save(TAG_TOKEN, Macroelement.token);
-							save(TAG_USER, Macroelement.user);
+							XLogin.save(mContext, XLogin.TAG_TOKEN, Macroelement.token);
+							XLogin.save(mContext, XLogin.TAG_USER, Macroelement.user);
 							Intent intent = new Intent();
 							intent.putExtra(XLogin.EXTRA_TOKEN, Macroelement.token);
 							setResult(RESULT_OK, intent);
@@ -381,51 +379,6 @@ public class LoginActivity extends BaseActivity {
 
 			}
 		});
-	}
-
-
-	private void save(String child, String data) {
-		String path = StorageUtil.getDataDir(mContext);
-		File file = new File(path, child);
-		FileOutputStream fos = null;
-
-		try {
-			if (!file.exists()) {
-				boolean isCreate = file.createNewFile();
-				if (!isCreate) {
-					throw new IOException("File create error");
-				}
-			}
-			String rsa = RSAUtil.privateEncrypt(data, RSAUtil.getPrivateKey(Macroelement.localPrivateKey));
-			fos = new FileOutputStream(file);
-			fos.write(rsa.getBytes());
-			fos.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			IOUtil.closeAll(fos);
-		}
-
-	}
-
-	private String read(String child) {
-		String path = StorageUtil.getDataDir(mContext);
-		File file = new File(path, child);
-		FileInputStream fis = null;
-		try {
-			if (!file.exists()) {
-				return null;
-			}
-			fis = new FileInputStream(file);
-			byte[] buff = new byte[1024];
-			int len = fis.read(buff);
-			return new String(buff, 0, len);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			IOUtil.closeAll(fis);
-		}
-		return null;
 	}
 
 

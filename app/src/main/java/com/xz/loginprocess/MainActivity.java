@@ -2,7 +2,9 @@ package com.xz.loginprocess;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import com.xz.xlogin.XLogin;
 public class MainActivity extends AppCompatActivity {
 
 	private TextView tvToken;
+	private boolean isLogin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +48,21 @@ public class MainActivity extends AppCompatActivity {
 		if (requestCode == XLogin.REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				tvToken.setText("token:" + data.getStringExtra(XLogin.EXTRA_TOKEN));
+				isLogin = true;
 			} else if (resultCode == RESULT_CANCELED) {
 				tvToken.setText("登录被终止");
 			}
 		}
 	}
 
+	public void onLogout(View view) {
+		if (isLogin) {
+			XLogin.logout(MainActivity.this);
+			isLogin = false;
+			tvToken.setText("token:");
+		} else {
+			Toast.makeText(MainActivity.this, "请先登录！", Toast.LENGTH_SHORT).show();
+			XLogin.login(MainActivity.this);
+		}
+	}
 }
