@@ -99,9 +99,9 @@ public class LoginActivity extends BaseActivity {
 	 * @return false 自动登录失败 true 自动登录成功
 	 */
 	private boolean autoLogin() {
-		String rsaToken = XLogin.read(mContext,XLogin.TAG_TOKEN);
+		String rsaToken = XLogin.read(mContext, XLogin.TAG_TOKEN);
 		if (rsaToken != null) {
-			String rsaUser = XLogin.read(mContext,XLogin.TAG_USER);
+			String rsaUser = XLogin.read(mContext, XLogin.TAG_USER);
 			if (rsaUser != null) {
 				String user = null;
 				String token = null;
@@ -332,40 +332,46 @@ public class LoginActivity extends BaseActivity {
 				try {
 					JSONObject obj = new JSONObject(response);
 					int code = obj.getInt("code");
-					if (code == 1) {
-						new TipsDialog.Builder(mContext)
-								.setType(TipsDialog.STYLE_SUCCESS)
-								.setTitle("马上就好啦")
-								.setContent("账号注册成功")
-								.setSubmitText("马上登录")
-								.setOnSubmitListener(new TipsDialog.OnSubmitListener() {
-									@Override
-									public void onClick(TipsDialog dialog) {
-										dialog.dismiss();
-										onViewClick(tvLogin);
-										loginFragment.setUserNo(phone);
-										registerFragment.cleanAll();
+					switch (code) {
+						case 1:
+							new TipsDialog.Builder(mContext)
+									.setType(TipsDialog.STYLE_SUCCESS)
+									.setTitle("马上就好啦")
+									.setContent("账号注册成功")
+									.setSubmitText("马上登录")
+									.setOnSubmitListener(new TipsDialog.OnSubmitListener() {
+										@Override
+										public void onClick(TipsDialog dialog) {
+											dialog.dismiss();
+											onViewClick(tvLogin);
+											loginFragment.setUserNo(phone);
+											registerFragment.cleanAll();
 
-									}
-								})
-								.build()
-								.show();
-					} else if (code == 1048) {
-						new TipsDialog.Builder(mContext)
-								.setType(TipsDialog.STYLE_WARN)
-								.setTitle("Emmm...出错了")
-								.setContent(obj.optString("status"))
-								.setSubmitText("让我想想")
-								.build()
-								.show();
-					} else {
-						new TipsDialog.Builder(mContext)
-								.setType(TipsDialog.STYLE_ERROR)
-								.setTitle("Emmm...异常")
-								.setContent("系统异常")
-								.setSubmitText("那就稍后再试吧")
-								.build()
-								.show();
+										}
+									})
+									.build()
+									.show();
+							break;
+						case 1048:
+						case 1058:
+						case 1059:
+							new TipsDialog.Builder(mContext)
+									.setType(TipsDialog.STYLE_WARN)
+									.setTitle("Emmm...")
+									.setContent(obj.optString("status"))
+									.setSubmitText("让我想想")
+									.build()
+									.show();
+							break;
+						default:
+							new TipsDialog.Builder(mContext)
+									.setType(TipsDialog.STYLE_ERROR)
+									.setTitle("Emmm...异常")
+									.setContent("系统异常")
+									.setSubmitText("那就稍后再试吧")
+									.build()
+									.show();
+							break;
 					}
 
 				} catch (JSONException e) {
