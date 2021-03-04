@@ -14,11 +14,9 @@ public class Macroelement {
 	//public static String SERVER = "https://www.xzlyf.top";//域名访问 已有证书  默认端口：443 不用写
 	//public static String SERVER = "https://www.xzlyf.top";//域名访问  默认端口：80 不用写
 	public static String alt_user = "/user";
-	public static String alt_todolist = "/todolist";
 	public static String alt_appinfo = "/appinfo";
 
 	public static String BASE_URL_USER;
-	public static String BASE_URL_TODO;
 	public static String BASE_URL_INFO;
 
 	//接口
