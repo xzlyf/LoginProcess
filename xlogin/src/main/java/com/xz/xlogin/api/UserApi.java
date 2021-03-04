@@ -1,6 +1,9 @@
 package com.xz.xlogin.api;
 
+import android.os.SystemClock;
+
 import com.orhanobut.logger.Logger;
+import com.xz.utils.encodUtils.MD5Util;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
@@ -58,7 +61,7 @@ public class UserApi {
 
 		Map<String, Object> params = new HashMap<>();
 		try {
-			params.put("password", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
+			params.put("pwd", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
 			//params.put("password", pwd);
 
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -67,8 +70,11 @@ public class UserApi {
 			callback.onError(null, e);
 			return;
 		}
-		params.put("phone", phone);
-		netUtil.get(Macroelement.BASE_URL_USER + Macroelement.GET_REGISTER, params, callback);
+		params.put("cert", phone);
+		params.put("type", "phone");
+		params.put("t", System.currentTimeMillis());
+		params.put("st", MD5Util.getMD5(String.valueOf(Math.random())));
+		netUtil.post(Macroelement.BASE_URL_USER + Macroelement.GET_REGISTER, params, callback);
 	}
 
 	/**

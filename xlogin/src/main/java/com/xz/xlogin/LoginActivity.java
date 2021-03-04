@@ -327,6 +327,7 @@ public class LoginActivity extends BaseActivity {
 
 			@Override
 			public void onResponse(String response) {
+				Logger.w(response);
 				disLoading();
 				try {
 					JSONObject obj = new JSONObject(response);
@@ -343,6 +344,7 @@ public class LoginActivity extends BaseActivity {
 										dialog.dismiss();
 										onViewClick(tvLogin);
 										loginFragment.setUserNo(phone);
+										registerFragment.cleanAll();
 
 									}
 								})

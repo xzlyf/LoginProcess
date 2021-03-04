@@ -189,5 +189,11 @@ public class RegisterFragment extends BaseFragment {
 		return etRepeatPwd.getText().toString().trim();
 	}
 
+	public void cleanAll(){
+		etCode.setText("");
+		etPhone.setText("");
+		etPwd.setText("");
+		etRepeatPwd.setText("");
+	}
 
 }
