@@ -62,9 +62,11 @@ public class LoginActivity extends BaseActivity {
 	private TextView btnSubmit;
 
 
-	private static final int TYPE_PHONE = 1;//手机登录
-	private static final int TYPE_NO = 2;//账号登录
-	private static final int TYPE_TOKEN = 3;//token登录
+	private static final String TYPE_PHONE = "phone";//手机登录
+	private static final String TYPE_NO = "account";//账号登录
+	private static final String TYPE_TOKEN = "token";//token登录
+	private static final String TYPE_QQ = "qq";//qq登录
+	private static final String TYPE_EMAIL = "email";//邮箱登录
 	private boolean isLoaded = false;
 
 
@@ -241,7 +243,7 @@ public class LoginActivity extends BaseActivity {
 	/**
 	 * 手机号密码登录
 	 */
-	private void login(String user, String password, int type) {
+	private void login(String user, String password, String type) {
 		Macroelement.user = user;
 		if (user.equals("") || password.equals("")) {
 			return;

@@ -3,6 +3,7 @@ package com.xz.xlogin.api;
 import android.os.SystemClock;
 
 import com.orhanobut.logger.Logger;
+import com.xz.utils.appUtils.StringUtil;
 import com.xz.utils.encodUtils.MD5Util;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
@@ -82,14 +83,17 @@ public class UserApi {
 	 *
 	 * @param type 1-手机登录 2-账号登录 3-token登录
 	 */
-	public void login(int type, String account, String pwd, NetUtil.ResultCallback<String> callback) {
+	public void login(String type, String account, String pwd, NetUtil.ResultCallback<String> callback) {
 		long timestamp = System.currentTimeMillis();
 		Map<String, Object> params = new HashMap<>();
-		params.put("account", account);
+		params.put("cert", account);
 		params.put("type", type);
+		params.put("t", timestamp);
+		params.put("st", StringUtil.getRandomString(8));
 		try {
 			//密码规则=明文密码+时间戳
-			params.put("password", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Macroelement.publicKey)));
+			//params.put("pwd", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Macroelement.publicKey)));
+			params.put("pwd", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 			Logger.e("RSA运算错误");
