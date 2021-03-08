@@ -1,34 +1,39 @@
 package com.xz.xlogin.network;
 
 public enum StatusEnum {
+
+
+	//===================基础信息（区间：-10~10）=====================
 	SUCCESS(1, "success"),
 	ERROR(-1, "未知错误"),
-	//ERROR_TOKEN(2, "token已过期"),
-	ERROR_TOKEN(2, "登录已过期"),
-	ERROR_SIGN_NULL(3, "签名验证不存在"),
-	ERROR_SIGN(4, "签名验证失败"),
-	ERROR_TIMESTAMP_NULL(5, "时间戳不存在"),
-	ERROR_TIMESTAMP(6, "时间未与服务器同步"),
-	ERROR_TIMESTAMP_RECEIVE(7, "时间戳不合法"),
-	ERROR_APPID_NULL(8, "缺失AppId参数"),
-	ERROR_APPID_NOTFALL(9, "AppId不存在"),
-	ERROR_SECRET(10, "密钥无效"),
-	ERROR_PARAMS(11, "参数错误"),
-	WORN_UPDATE_VERSION(66, "当前已是最新版本"),
-	WORN_UPDATE_NULL(67, "更新文件错误"),
-	NULL_USER(1045, "用户不存在"),
-	FAILED_USER_ADD(1046, "用户创建失败"),
-	FAILED_USER_UPDATE(1047, "用户更新失败"),
-	FAILED_USER_EXIST(1048, "手机号已注册"),
-	FAILED_USER_LOGIN(1049, "账号或密码错误"),
-	FAILED_USER_LOGIN_NO_USER_PHONE(1050, "手机号未注册"),
-	FAILED_USER_LOGIN_NO_USER_NO(1051, "账号未注册"),
-	FAILED_USER_DETAIL_UPDATE(1052, "用户信息更新失败"),
-	FAILED_EVENT_CREATE(1053, "事件创建失败"),
-	FAILED_EVENT_DELETE(1054, "事件删除失败"),
-	FAILED_EVENT_NULL(1055, "未找到对应事件"),
-	FAILED_EVENT_UPDATE(1056, "更新事件失败"),
-	FAILED_USER_OLDPWD(1057, "旧密码错误");
+	//===================接口提示（区间：100~299）=====================
+	STATUS_100(100, "当前已是最新版本"),
+	STATUS_101(101, "更新文件错误"),
+
+	//===================请求提示（区间：300~599）=====================
+	STATUS_301(301, "签名验证失败"),
+	STATUS_303(303, "时间未与服务器同步"),
+	STATUS_304(304, "时间戳不合法"),
+	STATUS_305(305, "缺少AppId参数"),
+	STATUS_306(306, "非法AppId"),
+	STATUS_307(307, "密钥无效"),
+	STATUS_400(400, "参数错误"),
+	STATUS_401(401, "缺失重要参数"),
+	//===================用户账号（区间：600~799）=====================
+	STATUS_600(600, "登录已过期"),
+	STATUS_601(601, "账号或密码验证失败"),
+	STATUS_602(602, "用户不存在"),
+	STATUS_603(603, "用户信息更新失败"),
+	STATUS_604(604, "用户创建失败"),
+	STATUS_605(605, "用户更新失败"),
+	STATUS_680(680, "旧密码错误"),
+	STATUS_681(681, "手机号已注册"),
+	STATUS_682(682, "邮箱已注册"),
+	STATUS_683(683, "QQ已绑定账号"),
+	STATUS_690(690, "qq未绑定账号"),
+	STATUS_691(691, "邮箱未注册"),
+	STATUS_692(692, "手机号未注册"),
+	STATUS_693(693, "账号未注册");
 
 	/**
 	 * 响应状态码
@@ -44,7 +49,7 @@ public enum StatusEnum {
 		this.msg = msg;
 	}
 
-	public int getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
@@ -52,6 +57,15 @@ public enum StatusEnum {
 		return msg;
 	}
 
+	public static StatusEnum getEnum(int value) {
+		StatusEnum[] enums = values();
+		for (StatusEnum statusEnum : enums) {
+			if (statusEnum.getCode().equals(value)) {
+				return statusEnum;
+			}
+		}
+		return null;
+	}
 
 	public static String getValue(Integer key) {
 		StatusEnum[] businessModeEnums = values();

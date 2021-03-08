@@ -275,15 +275,17 @@ public class LoginActivity extends BaseActivity {
 							setResult(RESULT_OK, intent);
 							finish();
 							break;
-						case 2:
+						case 600:
 							if (!isLoaded) {
 								initView();
 							}
 							TipsDialogUtil.commonDialogV2(mContext, StatusEnum.getValue(code));
 							break;
-						case 1049:
-						case 1050:
-						case 1051:
+						case 601:
+						case 690:
+						case 691:
+						case 692:
+						case 693:
 							if (!isLoaded) {
 								initView();
 							}
@@ -354,9 +356,9 @@ public class LoginActivity extends BaseActivity {
 									.build()
 									.show();
 							break;
-						case 1048:
-						case 1058:
-						case 1059:
+						case 681:
+						case 682:
+						case 683:
 							new TipsDialog.Builder(mContext)
 									.setType(TipsDialog.STYLE_WARN)
 									.setTitle("Emmm...")
