@@ -281,6 +281,7 @@ public class LoginActivity extends BaseActivity {
 							}
 							TipsDialogUtil.commonDialogV2(mContext, StatusEnum.getValue(code));
 							break;
+						case 102:
 						case 601:
 						case 690:
 						case 691:
