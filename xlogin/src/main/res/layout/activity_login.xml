@@ -6,65 +6,73 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="20dp"
+        android:background="@drawable/share_text_bottom_line"
+        android:text="登录"
+        android:textColor="@color/colorPrimary"
+        android:textSize="28sp" />
 
-        <TextView
-            android:id="@+id/tv_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/share_text_bottom_line"
-            android:text="登录"
-            android:textColor="@color/colorPrimary"
-            android:textSize="28sp" />
-
-        <TextView
-            android:id="@+id/tv_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/share_text_bottom_line_hide"
-            android:text="注册"
-            android:textColor="@color/colorPrimary"
-            android:textSize="28sp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/main_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!--我已阅读《用户注册协议》-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="3dp">
+        android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/box_protocol"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/et_user"
+            style="@style/InputEditCommonTheme"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="我已阅读并同意"
-            android:textSize="14sp" />
+            android:hint="请输入手机号/账号" />
 
-        <TextView
-            android:id="@+id/tv_protocol"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/et_pwd"
+            style="@style/InputEditCommonTheme"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:clickable="true"
-            android:focusable="true"
-            android:textSize="14sp" />
+            android:background="@drawable/select_edit"
+            android:hint="请输入登录密码"
+            android:inputType="textPassword" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/tv_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:text="用户注册"
+                android:textColor="@color/dodgerblue" />
+
+            <TextView
+                android:id="@+id/tv_forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:text="忘记密码？"
+                android:textColor="@color/dodgerblue" />
+        </FrameLayout>
     </LinearLayout>
+
 
     <!--提交按钮-->
     <TextView

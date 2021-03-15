@@ -1,4 +1,4 @@
-package com.xz.xlogin;
+package com.xz.xlogin.ui;
 
 import android.net.http.SslError;
 import android.os.Build;
@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.orhanobut.logger.Logger;
+import com.xz.xlogin.R;
 
 
 public class WebActivity extends AppCompatActivity {

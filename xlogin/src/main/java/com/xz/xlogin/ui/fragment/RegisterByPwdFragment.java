@@ -1,7 +1,6 @@
-package com.xz.xlogin.fragment;
+package com.xz.xlogin.ui.fragment;
 
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.base.BaseFragment;
 
@@ -19,12 +17,10 @@ import com.xz.xlogin.base.BaseFragment;
  * @email czr2001@outlook.com
  * @date 2020/12/10
  */
-public class RegisterFragment extends BaseFragment {
+public class RegisterByPwdFragment extends BaseFragment {
 
 	//密码不符合规范
 	private boolean isNotFit = false;
-	private EditText etPhone;
-	private EditText etCode;
 	private EditText etPwd;
 	private ImageView alterPwd;
 	private EditText etRepeatPwd;
@@ -33,13 +29,11 @@ public class RegisterFragment extends BaseFragment {
 
 	@Override
 	protected int getLayout() {
-		return R.layout.fragment_register;
+		return R.layout.fragment_register_pwd;
 	}
 
 	@Override
 	protected void initView(View rootView) {
-		etPhone = rootView.findViewById(R.id.et_phone);
-		etCode = rootView.findViewById(R.id.et_code);
 		etPwd = rootView.findViewById(R.id.et_pwd);
 		alterPwd = rootView.findViewById(R.id.alter_pwd);
 		etRepeatPwd = rootView.findViewById(R.id.et_repeat_pwd);
@@ -56,15 +50,6 @@ public class RegisterFragment extends BaseFragment {
 					if (!etRepeatPwd.getText().toString().equals("")) {
 						sensePwd();
 					}
-				}
-			}
-		});
-
-		etPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) {
-					etPhone.setBackgroundResource(R.drawable.select_edit);
 				}
 			}
 		});
@@ -143,18 +128,6 @@ public class RegisterFragment extends BaseFragment {
 	/**
 	 * ------------获取控件数值-------------
 	 */
-	public String getPhone() {
-		String phone = etPhone.getText().toString().trim();
-		if (phone.equals("")) {
-			etPhone.setBackgroundResource(R.drawable.select_edit_error);
-			return "";
-		}
-		return phone;
-	}
-
-	public String getCode() {
-		return etCode.getText().toString().trim();
-	}
 
 	public String getPwd() {
 
@@ -189,9 +162,7 @@ public class RegisterFragment extends BaseFragment {
 		return etRepeatPwd.getText().toString().trim();
 	}
 
-	public void cleanAll(){
-		etCode.setText("");
-		etPhone.setText("");
+	public void cleanAll() {
 		etPwd.setText("");
 		etRepeatPwd.setText("");
 	}

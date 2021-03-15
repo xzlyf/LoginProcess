@@ -73,7 +73,9 @@ public class TimeButton extends Button implements View.OnClickListener {
 	public void end() {
 		setEnabled(true);
 		setText(beforeText);
-		countDownTimer.cancel();
+		if (countDownTimer != null) {
+			countDownTimer.cancel();
+		}
 	}
 
 

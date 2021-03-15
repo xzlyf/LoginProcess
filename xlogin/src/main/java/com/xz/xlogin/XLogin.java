@@ -10,6 +10,7 @@ import com.orhanobut.logger.Logger;
 import com.xz.utils.fileUtils.StorageUtil;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.constant.Macroelement;
+import com.xz.xlogin.ui.LoginActivity;
 import com.xz.xlogin.util.IOUtil;
 import com.xz.xlogin.util.RSAUtil;
 
@@ -27,8 +28,8 @@ public class XLogin {
 
 	public static final int REQUEST_CODE = 0x0001212;
 	public static final String EXTRA_TOKEN = "token";
-	protected static final String TAG_TOKEN = "token";
-	protected static final String TAG_USER = "user";
+	public static final String TAG_TOKEN = "token";
+	public static final String TAG_USER = "user";
 
 	public static void init(XLoginBuilder builder) {
 		if (builder.isLog) {
@@ -73,8 +74,8 @@ public class XLogin {
 					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.localPublicKey));
 					UserApi api = UserApi.getInstance();
 					//注销接口
-					Logger.w("账号："+user);
-					Logger.w("token："+token);
+					Logger.w("账号：" + user);
+					Logger.w("token：" + token);
 					api.logout(user, token);
 					//删除自动登录文件
 					delete(context, TAG_USER);
@@ -103,7 +104,7 @@ public class XLogin {
 
 	}
 
-	protected static void save(Context context, String child, String data) {
+	public static void save(Context context, String child, String data) {
 		String path = StorageUtil.getDataDir(context);
 		File file = new File(path, child);
 		FileOutputStream fos = null;
@@ -127,7 +128,7 @@ public class XLogin {
 
 	}
 
-	protected static String read(Context context, String child) {
+	public static String read(Context context, String child) {
 		String path = StorageUtil.getDataDir(context);
 		File file = new File(path, child);
 		FileInputStream fis = null;
