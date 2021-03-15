@@ -1,6 +1,7 @@
 package com.xz.xlogin.fragment;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -37,7 +38,6 @@ public class RegisterFragment extends BaseFragment {
 
 	@Override
 	protected void initView(View rootView) {
-
 		etPhone = rootView.findViewById(R.id.et_phone);
 		etCode = rootView.findViewById(R.id.et_code);
 		etPwd = rootView.findViewById(R.id.et_pwd);
