@@ -47,12 +47,9 @@ public class UserApi {
 	/**
 	 * 获取用户条例地址
 	 *
-	 * @param callback
 	 */
-	public void getUserRules(NetUtil.ResultCallback<ApiResult<String>> callback) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("appid", Macroelement.appId);
-		netUtil.get_public(Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE, params, callback);
+	public String getUserRules() {
+		return Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE+"?appId="+Macroelement.appId;
 	}
 
 	/**

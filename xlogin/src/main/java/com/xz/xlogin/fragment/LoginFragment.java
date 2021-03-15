@@ -56,7 +56,7 @@ public class LoginFragment extends BaseFragment {
 		if (id == R.id.tv_type) {
 			if (type == 1) {
 				type = 2;
-				tvType.setText("手机号登录");
+				tvType.setText("验证码登录");
 			} else if (type == 2) {
 				type = 1;
 				tvType.setText("账号密码登录");

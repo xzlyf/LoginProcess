@@ -181,22 +181,8 @@ public class LoginActivity extends BaseActivity {
 	 */
 	private void getProtocol() {
 		tvProtocol.setText(Html.fromHtml("《<font color=\"" + ColorUtil.int2Hex(getColor(R.color.colorAccent)) + "\">注册与使用协议</font>》"));
-		userApi.getUserRules(new NetUtil.ResultCallback<ApiResult<String>>() {
-			@Override
-			public void onError(Request request, Exception e) {
-				Logger.e("注册使用协议地址请求错误了：" + e.getMessage());
-			}
+		userRuleUrl = userApi.getUserRules();
 
-			@Override
-			public void onResponse(ApiResult<String> response) {
-				if (response.getCode() == 1) {
-					userRuleUrl = response.getData();
-				} else {
-					Logger.e("错误：" + response.getStatus());
-				}
-			}
-
-		});
 	}
 
 
