@@ -123,6 +123,7 @@ public class LoginActivity extends BaseActivity {
 		} else if (id == R.id.tv_register) {
 			//跳转至注册页面
 			startActivity(new Intent(mContext, RegisterActivity.class));
+			overridePendingTransition(R.anim.activity_show, R.anim.activity_hide);
 		}
 	}
 

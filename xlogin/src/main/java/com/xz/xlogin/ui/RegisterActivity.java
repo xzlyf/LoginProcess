@@ -240,4 +240,8 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 
+	public void finish() {
+		super.finish();
+		overridePendingTransition(R.anim.activity_show2,R.anim.activity_hide2);
+	}
 }
