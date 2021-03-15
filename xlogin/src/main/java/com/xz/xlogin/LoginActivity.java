@@ -343,6 +343,8 @@ public class LoginActivity extends BaseActivity {
 									.build()
 									.show();
 							break;
+						case 306:
+						case 400:
 						case 681:
 						case 682:
 						case 683:

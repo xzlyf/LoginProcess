@@ -106,7 +106,7 @@ public class UserApi {
 	 */
 	public void logout(String userNo, String token) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("userNo", userNo);
+		params.put("cert", userNo);
 		params.put("token", token);
 		netUtil.get(Macroelement.BASE_URL_USER + Macroelement.GET_LOGOUT, params, new NetUtil.ResultCallback<ApiResult<String>>() {
 			@Override
