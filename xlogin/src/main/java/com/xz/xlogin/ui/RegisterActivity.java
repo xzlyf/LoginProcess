@@ -22,6 +22,7 @@ import com.xz.xlogin.ui.fragment.RegisterByPwdFragment;
 import com.xz.xlogin.util.ColorUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
 import com.xz.xlogin.widget.TipsDialog;
+import com.xz.xlogin.widget.VerificationDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,10 +142,19 @@ public class RegisterActivity extends BaseActivity {
 			sToast("请先阅读并同意用户使用条例");
 			return;
 		}
+		showVerificationDialog();
 
-		// TODO: 2021/3/15 获取验证码api
 		//请求api后才开始计时
 		phoneFragment.startClock();
+	}
+
+	/**
+	 * 验证码对话框
+	 */
+	private void showVerificationDialog() {
+		VerificationDialog dialog = new VerificationDialog(mContext);
+		dialog.create();
+		dialog.show();
 	}
 
 
@@ -242,6 +252,6 @@ public class RegisterActivity extends BaseActivity {
 
 	public void finish() {
 		super.finish();
-		overridePendingTransition(R.anim.activity_show2,R.anim.activity_hide2);
+		overridePendingTransition(R.anim.activity_show2, R.anim.activity_hide2);
 	}
 }

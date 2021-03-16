@@ -62,5 +62,4 @@ dependencies {
     //经过修改的apache codes包，因为Base64会与安卓的Base64冲突，这个包修改了包名
 //    api files('libs/commons-codes-android-1.15.jar')
 
-
 }

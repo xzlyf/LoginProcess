@@ -9,9 +9,10 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".ui.RegisterActivity"
+        <activity
+            android:name=".ui.RegisterActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="fullUser"/>
+            android:screenOrientation="fullUser" />
         <activity
             android:name=".ui.LoginActivity"
             android:launchMode="singleInstance"
