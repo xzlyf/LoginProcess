@@ -42,6 +42,7 @@ public class XLogin {
 		Macroelement.SERVER = builder.server;
 		Macroelement.BASE_URL_USER = Macroelement.SERVER + Macroelement.alt_user;
 		Macroelement.BASE_URL_INFO = Macroelement.SERVER + Macroelement.alt_appinfo;
+		Macroelement.BASE_URL_APP = Macroelement.SERVER + Macroelement.alt_app;
 	}
 
 

@@ -1,1 +1,5 @@
-<resources></resources>
+<resources>
+    <string name="code">
+        0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    </string>
+</resources>

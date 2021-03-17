@@ -15,11 +15,15 @@ public class Macroelement {
 	//public static String SERVER = "https://www.xzlyf.top";//域名访问  默认端口：80 不用写
 	public static String alt_user = "/user";
 	public static String alt_appinfo = "/info";
+	public static String alt_app = "/app";
 
 	public static String BASE_URL_USER;
 	public static String BASE_URL_INFO;
+	public static String BASE_URL_APP;
 
 	//接口
+	public static final String GET_VERIFY_IMG = "/verifyImage";//获取图片验证码
+	public static final String GET_VERIFY_CODE = "/verifyCode";//校验图片验证码
 	public static final String GET_USER_RULE = "/getUserRules";//获取隐私协议
 	public static final String GET_REGISTER = "/register";//注册
 	public static final String GET_LOGIN = "/login";//登录
