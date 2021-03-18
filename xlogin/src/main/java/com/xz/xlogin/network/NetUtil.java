@@ -391,6 +391,10 @@ public class NetUtil {
 	 * =============公开请求方法==============
 	 */
 
+	public OkHttpClient getOkHttpClient() {
+		return mOkHttpClient;
+	}
+
 	public void get(String url, Map<String, Object> params, ResultCallback callback) {
 		Request request = buildGetRequest(System.currentTimeMillis(), url, params);
 		deliveryRequest(request, callback);

@@ -144,8 +144,7 @@ public class RegisterActivity extends BaseActivity {
 		}
 		showVerificationDialog();
 
-		//请求api后才开始计时
-		phoneFragment.startClock();
+
 	}
 
 	/**
@@ -153,6 +152,38 @@ public class RegisterActivity extends BaseActivity {
 	 */
 	private void showVerificationDialog() {
 		VerificationDialog dialog = new VerificationDialog(mContext);
+		dialog.setVerifyStatusCallbackListener(new VerificationDialog.VerifyStatusCallback() {
+			@Override
+			public void onStartVerify() {
+
+			}
+
+			@Override
+			public void onRefreshImg() {
+
+			}
+
+			@Override
+			public void onVerifyOverMuch() {
+
+			}
+
+			@Override
+			public void onVerifyIng() {
+
+			}
+
+			@Override
+			public void onVerifySuccess() {
+				//验证成功后才开始倒计时
+				phoneFragment.startClock();
+			}
+
+			@Override
+			public void onVerifyError() {
+
+			}
+		});
 		dialog.create();
 		dialog.show();
 	}

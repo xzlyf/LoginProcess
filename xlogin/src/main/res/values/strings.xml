@@ -1,5 +1,5 @@
 <resources>
     <string name="code">
-        0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
     </string>
 </resources>

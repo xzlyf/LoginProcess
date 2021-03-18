@@ -14,7 +14,8 @@
         style="@style/InputEditCommonTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="手机号" />
+        android:hint="手机号"
+        android:inputType="numberSigned" />
 
     <LinearLayout
         android:layout_width="match_parent"
