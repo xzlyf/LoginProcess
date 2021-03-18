@@ -20,10 +20,12 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +39,11 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
 import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -62,6 +68,25 @@ public class NetUtil {
 		okHttpBuilder.readTimeout(15, TimeUnit.SECONDS);
 		//是否自动重连
 		okHttpBuilder.retryOnConnectionFailure(false);
+		//自动管理cookie ---待修复 自动管理cookie
+		//okHttpBuilder.cookieJar(new CookieJar() {
+		//	//这里一定一定一定是HashMap<String, List<Cookie>>,是String,不是url.
+		//	private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+		//
+		//	@Override
+		//	public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+		//		cookieStore.put(url.host(), cookies);
+		//	}
+		//
+		//	@Override
+		//	public List<Cookie> loadForRequest(HttpUrl url) {
+		//		List<Cookie> cookies = cookieStore.get(url.host());
+		//		return cookies != null ? cookies : new ArrayList<Cookie>();
+		//
+		//
+		//	}
+		//});
+
 		//禁制OkHttp的重定向操作
 		//okHttpBuilder.followRedirects(false);
 		//okHttpBuilder.followSslRedirects(false);
@@ -390,9 +415,23 @@ public class NetUtil {
 	/**
 	 * =============公开请求方法==============
 	 */
-
 	public OkHttpClient getOkHttpClient() {
 		return mOkHttpClient;
+	}
+
+	//获取会话id
+	public String getSessionId(Headers headers) {
+		List<String> values = headers.values("Set-Cookie");
+		if (values.size() == 0) {
+			return "";
+		}
+		String session = values.get(0);
+		return session.substring(0, session.indexOf(";"));
+	}
+
+	//自定义request请求头进行请求
+	public void custom_request(Request request, ResultCallback callback) {
+		deliveryRequest(request, callback);
 	}
 
 	public void get(String url, Map<String, Object> params, ResultCallback callback) {

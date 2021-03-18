@@ -165,12 +165,7 @@ public class RegisterActivity extends BaseActivity {
 
 			@Override
 			public void onVerifyOverMuch() {
-
-			}
-
-			@Override
-			public void onVerifyIng() {
-
+				sToast("刷新频繁，请稍后重试");
 			}
 
 			@Override
@@ -184,6 +179,9 @@ public class RegisterActivity extends BaseActivity {
 
 			}
 		});
+		if (isFinishing()) {
+			return;
+		}
 		dialog.create();
 		dialog.show();
 	}

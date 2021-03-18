@@ -1,6 +1,8 @@
 package com.xz.xlogin.widget;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,20 +10,17 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.signature.StringSignature;
+import androidx.annotation.Nullable;
+
 import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.api.CommonApi;
 import com.xz.xlogin.base.BaseDialog;
-import com.xz.xlogin.constant.Macroelement;
+import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
-
-import java.io.InputStream;
-import java.util.UUID;
+import com.xz.xlogin.network.StatusEnum;
 
 import okhttp3.Request;
 
@@ -36,6 +35,7 @@ public class VerificationDialog extends BaseDialog {
 	private ImageView verifyImg;
 	private VerifyStatusCallback mCallback;
 	private CommonApi api;
+	private boolean isLoading = false;
 
 	public VerificationDialog(Context context) {
 		this(context, 0);
@@ -89,6 +89,10 @@ public class VerificationDialog extends BaseDialog {
 		verifyImg.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (isLoading) {
+					Toast.makeText(getContext(), "正在加载，请稍后", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				loadImg();
 				mCallback.onRefreshImg();
 			}
@@ -101,11 +105,33 @@ public class VerificationDialog extends BaseDialog {
 	 * 加载图片验证码
 	 */
 	private void loadImg() {
-		Glide.with(getContext())
-				.load(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_IMG)
-				.signature(new StringSignature(UUID.randomUUID().toString()))  // 随机数字标签，方便下次请求更新图片
-				.diskCacheStrategy(DiskCacheStrategy.NONE)
-				.into(verifyImg);
+		//Glide.with(getContext())
+		//		.load(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_IMG)
+		//		.signature(new StringSignature(UUID.randomUUID().toString()))  // 随机数字标签，方便下次请求更新图片
+		//		.diskCacheStrategy(DiskCacheStrategy.NONE)
+		//		.into(verifyImg);
+		isLoading = true;
+		mCallback.onRefreshImg();
+		api.verifyCodeImg(new CommonApi.DataCallback<Bitmap>() {
+			@Override
+			public void data(Bitmap bitmap) {
+				isLoading = false;
+				verifyImg.post(new Runnable() {
+					@Override
+					public void run() {
+						verifyImg.setImageBitmap(bitmap);
+					}
+				});
+			}
+
+			@Override
+			public void error(Exception e) {
+				isLoading = false;
+				Logger.e("验证码请求失败");
+			}
+		});
+
+
 	}
 
 	/**
@@ -115,17 +141,27 @@ public class VerificationDialog extends BaseDialog {
 		if (code == null) {
 			return;
 		}
-		api.verifyCode(code, new NetUtil.ResultCallback<String>() {
+		api.verifyCode(code, new NetUtil.ResultCallback<ApiResult>() {
 			@Override
 			public void onError(Request request, Exception e) {
 				e.printStackTrace();
+				mCallback.onVerifyOverMuch();
 			}
 
 			@Override
-			public void onResponse(String response) {
-				Logger.w(response);
-			}
+			public void onResponse(ApiResult apiResult) {
+				switch (apiResult.getCode()) {
+					case 123:
+						mCallback.onVerifySuccess();
+						dismiss();
+						break;
+					default:
+						Toast.makeText(getContext(), apiResult.getStatus(), Toast.LENGTH_SHORT).show();
+						mCallback.onVerifyError();
+						break;
+				}
 
+			}
 		});
 	}
 
@@ -142,6 +178,7 @@ public class VerificationDialog extends BaseDialog {
 			}
 		});
 	}
+
 
 	private void hideInputMethod() {
 		//主动隐藏输入法
@@ -164,6 +201,7 @@ public class VerificationDialog extends BaseDialog {
 		this.mCallback = callback;
 	}
 
+
 	public interface VerifyStatusCallback {
 		//打开对话框
 		void onStartVerify();
@@ -173,9 +211,6 @@ public class VerificationDialog extends BaseDialog {
 
 		//验证过多
 		void onVerifyOverMuch();
-
-		//正在向后端验证
-		void onVerifyIng();
 
 		//验证成功
 		void onVerifySuccess();
