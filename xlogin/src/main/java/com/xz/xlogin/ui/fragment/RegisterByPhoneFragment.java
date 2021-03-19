@@ -3,6 +3,9 @@ package com.xz.xlogin.ui.fragment;
 import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xz.xlogin.R;
 import com.xz.xlogin.base.BaseFragment;
@@ -15,12 +18,14 @@ import com.xz.xlogin.widget.TimeButton;
  */
 public class RegisterByPhoneFragment extends BaseFragment {
 
-	//密码不符合规范
-	private boolean isNotFit = false;
 	private EditText etPhone;
 	private EditText etCode;
+	private LinearLayout registerTypeView;
+	private TextView registerTxt;
+	private ImageView registerImg;
 	private TimeButton btnTime;
 	private View.OnClickListener mOnClickListener;
+	private int registerType = 1;//1手机注册 2邮箱注册
 
 	@Override
 	protected int getLayout() {
@@ -31,6 +36,9 @@ public class RegisterByPhoneFragment extends BaseFragment {
 	protected void initView(View rootView) {
 		etPhone = rootView.findViewById(R.id.et_phone);
 		etCode = rootView.findViewById(R.id.et_code);
+		registerTypeView = rootView.findViewById(R.id.register_type);
+		registerTxt = rootView.findViewById(R.id.register_txt);
+		registerImg = rootView.findViewById(R.id.register_img);
 		btnTime = rootView.findViewById(R.id.btn_time);
 		btnTime.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -39,6 +47,22 @@ public class RegisterByPhoneFragment extends BaseFragment {
 					sToast("请先输入手机号");
 				} else {
 					mOnClickListener.onClick(v);
+				}
+			}
+		});
+		registerTypeView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (registerType == 1) {
+					registerType = 2;
+					registerTxt.setText("切换至手机注册");
+					registerImg.setImageResource(R.mipmap.ic_phone);
+					etPhone.setHint("邮箱号");
+				} else if (registerType == 2) {
+					registerType = 1;
+					registerTxt.setText("切换至邮箱注册");
+					registerImg.setImageResource(R.mipmap.ic_email);
+					etPhone.setHint("手机号");
 				}
 			}
 		});
@@ -83,6 +107,7 @@ public class RegisterByPhoneFragment extends BaseFragment {
 	public void startClock() {
 		btnTime.start();
 	}
+
 	public void setTimeButtonClickListener(View.OnClickListener listener) {
 		mOnClickListener = listener;
 	}

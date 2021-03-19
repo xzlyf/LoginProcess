@@ -44,5 +44,31 @@
             android:textColor="@color/white" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/register_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/register_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="3dp"
+            android:src="@mipmap/ic_email"
+            android:tint="@color/dodgerblue" />
+
+        <TextView
+            android:id="@+id/register_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="切换至邮箱注册"
+            android:textColor="@color/dodgerblue" />
+    </LinearLayout>
+
 
 </LinearLayout>
