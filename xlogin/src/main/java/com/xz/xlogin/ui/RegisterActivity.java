@@ -100,9 +100,9 @@ public class RegisterActivity extends BaseActivity {
 		mContent = phoneFragment;
 
 
-		phoneFragment.setTimeButtonClickListener(new View.OnClickListener() {
+		phoneFragment.setTimeButtonClickListener(new RegisterByPhoneFragment.OnViewClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v, int type) {
 				getAuthCode();
 			}
 		});

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xz.xlogin.R;
 import com.xz.xlogin.base.BaseFragment;
+import com.xz.xlogin.util.RegexUtil;
 import com.xz.xlogin.widget.TimeButton;
 
 /**
@@ -24,7 +25,7 @@ public class RegisterByPhoneFragment extends BaseFragment {
 	private TextView registerTxt;
 	private ImageView registerImg;
 	private TimeButton btnTime;
-	private View.OnClickListener mOnClickListener;
+	private OnViewClickListener mOnClickListener;
 	private int registerType = 1;//1手机注册 2邮箱注册
 
 	@Override
@@ -43,10 +44,32 @@ public class RegisterByPhoneFragment extends BaseFragment {
 		btnTime.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (etPhone.getText().toString().trim().equals("")) {
-					sToast("请先输入手机号");
+				String account = etPhone.getText().toString().trim();
+				//判断空
+				if (account.equals("")) {
+					if (registerType == 1) {
+						//手机验证码
+						sToast("请先输入手机号");
+					} else if (registerType == 2) {
+						//邮箱获取验证码
+						sToast("请先输入邮箱号");
+					}
 				} else {
-					mOnClickListener.onClick(v);
+					if (registerType == 1) {
+						//手机验证码
+						if (!RegexUtil.doRegex(account, RegexUtil.REGEX_MOBILE)) {
+							sToast("手机号格式错误");
+							return;
+						}
+					} else if (registerType == 2) {
+						//邮箱获取验证码
+						if (!RegexUtil.doRegex(account, RegexUtil.REGEX_EMAIL)) {
+							sToast("邮箱格式错误");
+							return;
+						}
+
+					}
+					mOnClickListener.onClick(v, registerType);
 				}
 			}
 		});
@@ -108,7 +131,7 @@ public class RegisterByPhoneFragment extends BaseFragment {
 		btnTime.start();
 	}
 
-	public void setTimeButtonClickListener(View.OnClickListener listener) {
+	public void setTimeButtonClickListener(OnViewClickListener listener) {
 		mOnClickListener = listener;
 	}
 
@@ -129,6 +152,10 @@ public class RegisterByPhoneFragment extends BaseFragment {
 	public void cleanAll() {
 		etCode.setText("");
 		etPhone.setText("");
+	}
+
+	public interface OnViewClickListener {
+		void onClick(View v, int type);
 	}
 
 }
