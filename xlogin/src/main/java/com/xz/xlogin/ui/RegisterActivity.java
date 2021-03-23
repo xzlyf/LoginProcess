@@ -111,6 +111,7 @@ public class RegisterActivity extends BaseActivity {
 
 	/**
 	 * 不重新加载fragment的切换fragment
+	 *
 	 */
 	private void showFragment(Fragment fragment) {
 		if (mContent != fragment) {
