@@ -156,8 +156,7 @@ public class VerificationDialog extends BaseDialog {
 						dismiss();
 						break;
 					default:
-						Toast.makeText(getContext(), apiResult.getStatus(), Toast.LENGTH_SHORT).show();
-						mCallback.onVerifyError();
+						mCallback.onVerifyError(apiResult.getStatus());
 						break;
 				}
 
@@ -216,7 +215,7 @@ public class VerificationDialog extends BaseDialog {
 		void onVerifySuccess();
 
 		//验证失败
-		void onVerifyError();
+		void onVerifyError(String msg);
 
 	}
 }

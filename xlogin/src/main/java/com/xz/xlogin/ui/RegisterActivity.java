@@ -3,7 +3,6 @@ package com.xz.xlogin.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -14,12 +13,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
+import com.xz.xlogin.api.CommonApi;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.base.BaseActivity;
+import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
+import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.ui.fragment.RegisterByPhoneFragment;
 import com.xz.xlogin.ui.fragment.RegisterByPwdFragment;
 import com.xz.xlogin.util.ColorUtil;
+import com.xz.xlogin.util.RegexUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
 import com.xz.xlogin.widget.TipsDialog;
 import com.xz.xlogin.widget.VerificationDialog;
@@ -32,6 +35,7 @@ import okhttp3.Request;
 public class RegisterActivity extends BaseActivity {
 	private int layoutNum = 1;//1手机  2邮箱  3密码·
 	private UserApi userApi;
+	private CommonApi commonApi;
 	private FragmentTransaction transaction;
 	private FragmentManager manager;
 	private Fragment mContent;
@@ -60,6 +64,7 @@ public class RegisterActivity extends BaseActivity {
 		setActionBarBackColor(getColor(R.color.colorPrimary));
 		changeStatusBarTextColor();
 		userApi = UserApi.getInstance();
+		commonApi = CommonApi.getInstance();
 		initView();
 		initFragment();
 		btnSubmit.setText("下一步");
@@ -100,6 +105,7 @@ public class RegisterActivity extends BaseActivity {
 		mContent = phoneFragment;
 
 
+		//获取验证码按钮点击时间
 		phoneFragment.setTimeButtonClickListener(new RegisterByPhoneFragment.OnViewClickListener() {
 			@Override
 			public void onClick(View v, int type) {
@@ -111,7 +117,6 @@ public class RegisterActivity extends BaseActivity {
 
 	/**
 	 * 不重新加载fragment的切换fragment
-	 *
 	 */
 	private void showFragment(Fragment fragment) {
 		if (mContent != fragment) {
@@ -127,8 +132,6 @@ public class RegisterActivity extends BaseActivity {
 
 	/**
 	 * 是否已同意用户条例
-	 *
-	 * @return
 	 */
 	private boolean isAllow() {
 		return boxProtocol.isChecked();
@@ -149,7 +152,7 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	/**
-	 * 验证码对话框
+	 * 显示验证码对话框
 	 */
 	private void showVerificationDialog() {
 		VerificationDialog dialog = new VerificationDialog(mContext);
@@ -173,11 +176,12 @@ public class RegisterActivity extends BaseActivity {
 			public void onVerifySuccess() {
 				//验证成功后才开始倒计时
 				phoneFragment.startClock();
+				sendVerifyCode(phoneFragment.getAccount(), phoneFragment.getType());
 			}
 
 			@Override
-			public void onVerifyError() {
-
+			public void onVerifyError(String msg) {
+				sToast(msg);
 			}
 		});
 		if (isFinishing()) {
@@ -185,6 +189,42 @@ public class RegisterActivity extends BaseActivity {
 		}
 		dialog.create();
 		dialog.show();
+	}
+
+	/**
+	 * 请求服务端发送验证码
+	 *
+	 * @param type 验证码类型 1手机 2邮箱
+	 */
+	private void sendVerifyCode(String email, int type) {
+		if (type == 1) {
+			sToast("手机注册暂时未开放");
+		} else if (type == 2) {
+			commonApi.getEmailCode(email, new NetUtil.ResultCallback<ApiResult>() {
+				@Override
+				public void onError(Request request, Exception e) {
+					Logger.w(e.getMessage());
+					sDialog("异常了", "当前网络异常请稍后重试");
+				}
+
+				@Override
+				public void onResponse(ApiResult response) {
+					Logger.d("状态码：" + response.getCode());
+					switch (response.getCode()) {
+						case 1:
+							sToast("发送成功，请检查邮箱");
+							break;
+						default:
+							sDialog("提示", StatusEnum.getValue(response.getCode()));
+							break;
+					}
+				}
+			});
+		} else {
+			sToast("注册途径不存在");
+		}
+
+
 	}
 
 
@@ -201,7 +241,7 @@ public class RegisterActivity extends BaseActivity {
 	 * 手机号注册
 	 */
 	private void phoneRegister() {
-		final String phone = phoneFragment.getPhone();
+		final String phone = phoneFragment.getAccount();
 		final String pwd = pwdFragment.getPwd();
 		if (phone.equals("") || pwd.equals("")) {
 			return;

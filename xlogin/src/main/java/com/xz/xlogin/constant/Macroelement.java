@@ -22,6 +22,7 @@ public class Macroelement {
 	public static String BASE_URL_APP;
 
 	//接口
+	public static final String GET_EMAIL_CODE = "/sendVerifyEmail";//请求发送邮箱验证码
 	public static final String GET_VERIFY_IMG = "/verifyImage";//获取图片验证码
 	public static final String GET_VERIFY_CODE = "/verifyCode";//校验图片验证码
 	public static final String GET_USER_RULE = "/getUserRules";//获取隐私协议

@@ -135,7 +135,7 @@ public class RegisterByPhoneFragment extends BaseFragment {
 		mOnClickListener = listener;
 	}
 
-	public String getPhone() {
+	public String getAccount() {
 		String phone = etPhone.getText().toString().trim();
 		if (phone.equals("")) {
 			etPhone.setBackgroundResource(R.drawable.select_edit_error);
@@ -148,6 +148,9 @@ public class RegisterByPhoneFragment extends BaseFragment {
 		return etCode.getText().toString().trim();
 	}
 
+	public int getType(){
+		return registerType;
+	}
 
 	public void cleanAll() {
 		etCode.setText("");

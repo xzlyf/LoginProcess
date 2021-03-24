@@ -20,7 +20,6 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,11 +38,8 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.Headers;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -370,10 +366,30 @@ public class NetUtil {
 
 	/**
 	 * 通用GET请求
+	 * 可供外部调用
 	 */
-	private Request buildGetCommonRequest(String url, Map<String, Object> params) {
+	public Request buildGetCommonRequest(String url, Map<String, Object> params) {
 		return new Request.Builder()
 				.url(attachHttpGetParams(url, params, true))
+				.build();
+	}
+
+	/**
+	 * 通用POST请求
+	 * 可供外部调用
+	 */
+	public Request buildPostCommonRequest(long timestamp, String url, Map<String, Object> params) {
+		if (params == null) {
+			params = new HashMap<>();
+		}
+		FormBody.Builder builder = new FormBody.Builder();
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			builder.add(entry.getKey(), entry.getValue().toString());
+		}
+		RequestBody requestBody = builder.build();
+		return new Request.Builder()
+				.url(url)
+				.post(requestBody)
 				.build();
 	}
 

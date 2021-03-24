@@ -2,19 +2,11 @@ package com.xz.xlogin.api;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,7 +16,7 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Cookie;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,7 +34,7 @@ public class CommonApi {
 	private NetUtil netUtil;
 	private OkHttpClient client;
 
-	private String sessionId = null;
+	private static String sessionId = null;
 
 	private CommonApi() {
 		netUtil = NetUtil.getInstance();
@@ -62,31 +54,10 @@ public class CommonApi {
 
 
 	/**
-	 * 校验验证码
-	 */
-	public void verifyCode(String code, NetUtil.ResultCallback<ApiResult> callback) {
-		Request request;
-		if (sessionId == null) {
-			request = new Request.Builder()
-					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_CODE + "?code=" + code)
-					.build();
-		} else {
-			request = new Request.Builder()
-					.header("Cookie", sessionId)
-					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_CODE + "?code=" + code)
-					.build();
-		}
-
-		netUtil.custom_request(request, callback);
-
-	}
-
-	/**
 	 * 获取验证码图片
 	 */
 	public void verifyCodeImg(DataCallback<Bitmap> callback) {
 		Request request;
-		Logger.w("会话id:" + sessionId);
 		if (sessionId == null) {
 			request = new Request.Builder()
 					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_IMG)
@@ -113,10 +84,10 @@ public class CommonApi {
 				}
 
 				//获取这次请求的会话id，保证验证时候是同一个会话
-				if (sessionId == null) {
+				//if (sessionId == null) {
 					Headers headers = response.headers();
 					sessionId = netUtil.getSessionId(headers);
-				}
+				//}
 				Bitmap bmp = null;
 				InputStream is = response.body().byteStream();
 				bmp = BitmapFactory.decodeStream(is);
@@ -128,8 +99,31 @@ public class CommonApi {
 		});
 	}
 
+	/**
+	 * 校验验证码
+	 */
+	public void verifyCode(String code, NetUtil.ResultCallback<ApiResult> callback) {
+		Request request;
+		if (sessionId == null) {
+			request = new Request.Builder()
+					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_CODE + "?code=" + code)
+					.build();
+		} else {
+			request = new Request.Builder()
+					.header("Cookie", sessionId)
+					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_CODE + "?code=" + code)
+					.build();
+		}
 
-	private Bitmap getNetImage(String imageUrl) {
+		netUtil.custom_request(request, callback);
+
+	}
+
+
+	/**
+	 * 获取网络图片 转为 bitmap
+	 */
+	public Bitmap getNetImage(String imageUrl) {
 		Bitmap bmp = null;
 		try {
 			URL myurl = new URL(imageUrl);
@@ -150,6 +144,41 @@ public class CommonApi {
 		}
 		return bmp;
 
+	}
+
+	/**
+	 * 请求服务器发送手机验证码
+	 * todo 待完成 请求服务器发送手机验证码
+	 */
+	public void getPhoneCode() {
+
+	}
+
+	/**
+	 * 向服务器请求邮箱验证码发送
+	 */
+	public void getEmailCode(String email, NetUtil.ResultCallback<ApiResult> callback) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("email", email);
+		//填装body
+		FormBody.Builder builder = new FormBody.Builder();
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			builder.add(entry.getKey(), entry.getValue().toString());
+		}
+		Request request;
+		if (sessionId == null) {
+			request = new Request.Builder()
+					.post(builder.build())
+					.url(Macroelement.BASE_URL_APP + Macroelement.GET_EMAIL_CODE)
+					.build();
+		} else {
+			request = new Request.Builder()
+					.header("Cookie", sessionId)
+					.post(builder.build())
+					.url(Macroelement.BASE_URL_APP + Macroelement.GET_EMAIL_CODE)
+					.build();
+		}
+		netUtil.custom_request(request, callback);
 	}
 
 
