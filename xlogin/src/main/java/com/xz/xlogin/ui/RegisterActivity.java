@@ -33,7 +33,6 @@ import org.json.JSONObject;
 import okhttp3.Request;
 
 public class RegisterActivity extends BaseActivity {
-	private int layoutNum = 1;//1手机  2邮箱  3密码·
 	private UserApi userApi;
 	private CommonApi commonApi;
 	private FragmentTransaction transaction;
@@ -78,7 +77,7 @@ public class RegisterActivity extends BaseActivity {
 		btnSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showFragment(pwdFragment);
+				submitEmailCode(phoneFragment.getAccount(), phoneFragment.getCode());
 			}
 		});
 		tvProtocol.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +90,15 @@ public class RegisterActivity extends BaseActivity {
 		});
 
 		getProtocol();
+
+	}
+
+	/**
+	 * 注册与使用协议
+	 */
+	private void getProtocol() {
+		tvProtocol.setText(Html.fromHtml("《<font color=\"" + ColorUtil.int2Hex(getColor(R.color.colorAccent)) + "\">注册与使用协议</font>》"));
+		userRuleUrl = userApi.getUserRules();
 
 	}
 
@@ -214,6 +222,9 @@ public class RegisterActivity extends BaseActivity {
 						case 1:
 							sToast("发送成功，请检查邮箱");
 							break;
+						case 682:
+						case 402:
+							phoneFragment.endClock();
 						default:
 							sDialog("提示", StatusEnum.getValue(response.getCode()));
 							break;
@@ -227,15 +238,35 @@ public class RegisterActivity extends BaseActivity {
 
 	}
 
-
 	/**
-	 * 注册与使用协议
+	 * 验证邮箱验证码
 	 */
-	private void getProtocol() {
-		tvProtocol.setText(Html.fromHtml("《<font color=\"" + ColorUtil.int2Hex(getColor(R.color.colorAccent)) + "\">注册与使用协议</font>》"));
-		userRuleUrl = userApi.getUserRules();
+	private void submitEmailCode(String email, String code) {
+		showLoading("请稍后");
+		commonApi.verifyEmailCode(email, code, new NetUtil.ResultCallback<ApiResult>() {
+			@Override
+			public void onError(Request request, Exception e) {
+				disLoading();
+				Logger.w(e.getMessage());
+				sDialog("异常了", "当前网络异常请稍后重试");
+			}
 
+			@Override
+			public void onResponse(ApiResult response) {
+				disLoading();
+				switch (response.getCode()) {
+					case 1:
+						//验证成功，让用户设置密码
+						showFragment(pwdFragment);
+						break;
+					default:
+						sDialog("提示", response.getStatus());
+						break;
+				}
+			}
+		});
 	}
+
 
 	/**
 	 * 手机号注册

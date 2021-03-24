@@ -85,8 +85,8 @@ public class CommonApi {
 
 				//获取这次请求的会话id，保证验证时候是同一个会话
 				//if (sessionId == null) {
-					Headers headers = response.headers();
-					sessionId = netUtil.getSessionId(headers);
+				Headers headers = response.headers();
+				sessionId = netUtil.getSessionId(headers);
 				//}
 				Bitmap bmp = null;
 				InputStream is = response.body().byteStream();
@@ -179,6 +179,16 @@ public class CommonApi {
 					.build();
 		}
 		netUtil.custom_request(request, callback);
+	}
+
+	/**
+	 * 验证邮箱验证码
+	 */
+	public void verifyEmailCode(String email, String code, NetUtil.ResultCallback<ApiResult> callback) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("email", email);
+		params.put("code", code);
+		netUtil.post(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_EMAIL_CODE, params, callback);
 	}
 
 

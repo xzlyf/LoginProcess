@@ -130,6 +130,9 @@ public class RegisterByPhoneFragment extends BaseFragment {
 	public void startClock() {
 		btnTime.start();
 	}
+	public void endClock(){
+		btnTime.end();
+	}
 
 	public void setTimeButtonClickListener(OnViewClickListener listener) {
 		mOnClickListener = listener;
