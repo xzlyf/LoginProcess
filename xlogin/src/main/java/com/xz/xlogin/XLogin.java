@@ -53,7 +53,6 @@ public class XLogin {
 	 * RESULT_OK 会携带token
 	 */
 	public static void login(Activity activity) {
-		//activity.startActivity(new Intent(activity, LoginActivity.class));
 		activity.startActivityForResult(new Intent(activity, LoginActivity.class), REQUEST_CODE);
 
 	}
@@ -93,7 +92,7 @@ public class XLogin {
 				.methodOffset(0);
 	}
 
-	protected static boolean delete(Context context, String child) {
+	private static boolean delete(Context context, String child) {
 		String path = StorageUtil.getDataDir(context);
 		File file = new File(path, child);
 		if (file.exists()) {
