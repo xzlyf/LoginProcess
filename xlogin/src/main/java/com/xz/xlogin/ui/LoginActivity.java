@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.XLogin;
 import com.xz.xlogin.api.UserApi;
@@ -16,6 +17,7 @@ import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.util.RSAUtil;
+import com.xz.xlogin.util.RegexUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
 
 import org.json.JSONException;
@@ -85,6 +87,7 @@ public class LoginActivity extends BaseActivity {
 					e.printStackTrace();
 					return false;
 				}
+
 				login(user, token, TYPE_TOKEN);
 				return true;
 			}
@@ -116,11 +119,15 @@ public class LoginActivity extends BaseActivity {
 	private void onViewClick(View v) {
 		int id = v.getId();
 		if (id == R.id.btn_submit) {
-			if (!safeDom()) {
+			String account = etUser.getText().toString().trim();
+			String pwd = etPwd.getText().toString().trim();
+			if (account.equals("") || pwd.equals("")) {
+				sToast("请先输入账号密码");
 				return;
 			}
+			String type = determineAccountType(account);
 			//登录
-			login(etUser.getText().toString().trim(), etPwd.getText().toString().trim(), TYPE_PHONE);
+			login(account, pwd, type);
 		} else if (id == R.id.tv_register) {
 			//跳转至注册页面
 			startActivityForResult(new Intent(mContext, RegisterActivity.class), 0x1234);
@@ -129,19 +136,31 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	/**
-	 * 登陆前检查
+	 * 判断账号类型是手机还是邮箱什么的
+	 *
+	 * @return 返回登录类型字符串
 	 */
-	private boolean safeDom() {
-		if (etUser.getText().toString().length() < 4) {
-			sToast("用户账号不规范，请重试！");
-			return false;
+	private String determineAccountType(String account) {
+		//判断有没有包含@来区分手机号和邮箱号
+		if (account.indexOf('@') == -1) {
+			boolean isOk = RegexUtil.doRegex(account, RegexUtil.REGEX_MOBILE);
+			if (isOk) {
+				return TYPE_PHONE;
+			} else {
+				sToast("手机号格式不正确");
+				return "";
+			}
+		} else {
+			boolean isOk = RegexUtil.doRegex(account, RegexUtil.REGEX_EMAIL);
+			if (isOk) {
+				return TYPE_EMAIL;
+			} else {
+				sToast("邮箱格式不正确");
+				return "";
+			}
 		}
-		if (etPwd.getText().toString().length() < 4) {
-			sToast("密码长度过短，请重试");
-			return false;
-		}
-		return true;
 	}
+
 
 	/**
 	 * 手机号密码登录
