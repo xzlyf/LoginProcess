@@ -1,7 +1,7 @@
 package com.xz.xlogin.network;
 
-import com.xz.utils.encodUtils.MD5Util;
 import com.xz.xlogin.constant.Macroelement;
+import com.xz.xlogin.util.MD5Util;
 
 /**
  * @author czr

@@ -2,7 +2,6 @@ package com.xz.xlogin.base;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,13 +25,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.xz.utils.appUtils.ToastUtil;
-import com.xz.utils.appUtils.TransparentBarUtil;
 import com.xz.xlogin.R;
 import com.xz.xlogin.util.ColorUtil;
+import com.xz.xlogin.util.ToastUtil;
+import com.xz.xlogin.util.TransparentBarUtil;
 import com.xz.xlogin.widget.LoadingDialog;
 import com.xz.xlogin.widget.TipsDialog;
 

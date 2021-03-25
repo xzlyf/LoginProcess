@@ -10,8 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
-import com.xz.utils.appUtils.ToastUtil;
+import com.xz.xlogin.util.ToastUtil;
 
 
 public abstract class BaseFragment extends Fragment {

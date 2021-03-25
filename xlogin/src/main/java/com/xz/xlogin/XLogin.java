@@ -4,20 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
-
-import com.xz.utils.fileUtils.StorageUtil;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.ui.LoginActivity;
 import com.xz.xlogin.util.IOUtil;
 import com.xz.xlogin.util.RSAUtil;
+import com.xz.xlogin.util.StorageUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @author czr
@@ -30,11 +27,13 @@ public class XLogin {
 	public static final String EXTRA_TOKEN = "token";
 	public static final String TAG_TOKEN = "token";
 	public static final String TAG_USER = "user";
+	private static UserApi api;
 
-	public static void init(XLoginBuilder builder) {
+	public static void init(Config builder) {
 		if (builder.isLog) {
 			//todo 日志系统开发
 		}
+		api = UserApi.getInstance();
 		Macroelement.appId = builder.appId;
 		Macroelement.appSecret = builder.appSecret;
 		Macroelement.version = builder.version;
@@ -72,7 +71,6 @@ public class XLogin {
 				try {
 					user = RSAUtil.publicDecrypt(rsaUser, RSAUtil.getPublicKey(Macroelement.localPublicKey));
 					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.localPublicKey));
-					UserApi api = UserApi.getInstance();
 					//注销接口
 					api.logout(user, token);
 					//删除自动登录文件
@@ -86,8 +84,7 @@ public class XLogin {
 	}
 
 
-
-	private static boolean delete(Context context, String child) {
+	public static boolean delete(Context context, String child) {
 		String path = StorageUtil.getDataDir(context);
 		File file = new File(path, child);
 		if (file.exists()) {
@@ -141,91 +138,5 @@ public class XLogin {
 		return null;
 	}
 
-
-	public static class XLoginBuilder {
-		private String logTag;
-		private boolean isLog;
-		private String appId;
-		private String appSecret;
-		private String publicKey;
-		private String version;
-		private String server;
-
-		public XLoginBuilder() {
-		}
-
-		/**
-		 * 是否开启日志
-		 *
-		 * @param tag 日志的tag 如果为null则关闭日志
-		 */
-		public XLoginBuilder log(String tag) {
-			this.isLog = tag != null;
-			this.logTag = tag;
-			return this;
-		}
-
-		/**
-		 * 设置appid
-		 */
-		public XLoginBuilder appId(@NonNull String appId) {
-			this.appId = appId;
-			return this;
-		}
-
-		/**
-		 * 密钥
-		 */
-		public XLoginBuilder appSecret(@NonNull String appSecret) {
-			this.appSecret = appSecret;
-			return this;
-		}
-
-		/**
-		 * 服务器版本
-		 *
-		 * @param version
-		 * @return
-		 */
-		public XLoginBuilder serverVersion(@NonNull String version) {
-			this.version = version;
-			return this;
-		}
-
-		/**
-		 * 设置服务器
-		 */
-		public XLoginBuilder server(@NonNull String server) {
-			this.server = server;
-			return this;
-		}
-
-		/**
-		 * 设置公钥
-		 */
-		public XLoginBuilder publicKey(@NonNull String publicKey) {
-			this.publicKey = publicKey;
-			return this;
-		}
-
-		/**
-		 * 最后一步
-		 */
-		public XLoginBuilder build() {
-			return this;
-		}
-	}
-
-
-	/**
-	 * 登录回调
-	 */
-	public interface LoginCallback {
-		void onLogin(Intent intent);
-
-		void onCancel(Intent intent);
-
-		void onError(Exception e);
-	}
 
 }

@@ -2,20 +2,17 @@ package com.xz.xlogin.api;
 
 import androidx.annotation.NonNull;
 
-import com.xz.utils.appUtils.StringUtil;
-import com.xz.utils.encodUtils.MD5Util;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
-import com.xz.xlogin.network.StatusEnum;
+import com.xz.xlogin.util.MD5Util;
 import com.xz.xlogin.util.RSAUtil;
-import com.xz.xlogin.util.apache.codes.language.Soundex;
+import com.xz.xlogin.util.StringUtil;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import okhttp3.Request;
 
