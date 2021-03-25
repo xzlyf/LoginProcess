@@ -17,7 +17,7 @@ import com.xz.xlogin.widget.TimeButton;
  * @email czr2001@outlook.com
  * @date 2020/12/10
  */
-public class RegisterByPhoneFragment extends BaseFragment {
+public class RegisterByAccountFragment extends BaseFragment {
 
 	private EditText etPhone;
 	private EditText etCode;
@@ -89,6 +89,8 @@ public class RegisterByPhoneFragment extends BaseFragment {
 				}
 			}
 		});
+		// TODO: 2021/3/25 直接跳转到邮箱界面，待手机注册完善才恢复
+		registerTypeView.callOnClick();
 	}
 
 

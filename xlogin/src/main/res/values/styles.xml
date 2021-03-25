@@ -15,7 +15,7 @@
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:lines">1</item>
         <item name="android:autoLink">none</item>
-        <item name="android:maxLength">225</item>
+        <item name="android:maxLength">64</item>
         <item name="android:maxLines">1</item>
         <item name="android:background">@drawable/select_edit</item>
     </style>

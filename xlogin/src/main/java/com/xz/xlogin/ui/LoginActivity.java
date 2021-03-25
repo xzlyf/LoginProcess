@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.XLogin;
 import com.xz.xlogin.api.UserApi;
@@ -125,7 +124,14 @@ public class LoginActivity extends BaseActivity {
 				sToast("请先输入账号密码");
 				return;
 			}
+			if (pwd.length() < 6) {
+				sToast("密码太短了...");
+				return;
+			}
 			String type = determineAccountType(account);
+			if (type.equals("")) {
+				return;
+			}
 			//登录
 			login(account, pwd, type);
 		} else if (id == R.id.tv_register) {
@@ -197,28 +203,11 @@ public class LoginActivity extends BaseActivity {
 							setResult(RESULT_OK, intent);
 							finish();
 							break;
-						case 600:
-							if (!isLoaded) {
-								initView();
-							}
-							TipsDialogUtil.commonDialogV2(mContext, StatusEnum.getValue(code));
-							break;
-						case 102:
-						case 601:
-						case 690:
-						case 691:
-						case 692:
-						case 693:
-							if (!isLoaded) {
-								initView();
-							}
-							TipsDialogUtil.commonDialog(mContext, StatusEnum.getValue(code));
-							break;
 						default:
 							if (!isLoaded) {
 								initView();
 							}
-							TipsDialogUtil.systemErrorDialog(mContext);
+							TipsDialogUtil.commonDialogV2(mContext, StatusEnum.getValue(code));
 							break;
 					}
 

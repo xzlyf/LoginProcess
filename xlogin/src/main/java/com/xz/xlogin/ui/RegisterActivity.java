@@ -19,7 +19,7 @@ import com.xz.xlogin.base.BaseActivity;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
-import com.xz.xlogin.ui.fragment.RegisterByPhoneFragment;
+import com.xz.xlogin.ui.fragment.RegisterByAccountFragment;
 import com.xz.xlogin.ui.fragment.RegisterByPwdFragment;
 import com.xz.xlogin.util.ColorUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
@@ -37,7 +37,7 @@ public class RegisterActivity extends BaseActivity {
 	private FragmentTransaction transaction;
 	private FragmentManager manager;
 	private Fragment mContent;
-	private RegisterByPhoneFragment phoneFragment;
+	private RegisterByAccountFragment accountFragment;
 	private RegisterByPwdFragment pwdFragment;
 	private String userRuleUrl;
 	private CheckBox boxProtocol;
@@ -110,18 +110,18 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void initFragment() {
-		phoneFragment = new RegisterByPhoneFragment();
+		accountFragment = new RegisterByAccountFragment();
 		pwdFragment = new RegisterByPwdFragment();
 		manager = getSupportFragmentManager();      //初始化管理者
 
 		transaction = manager.beginTransaction();
 		//设置默认默认fragment
-		transaction.add(R.id.main_fragment, phoneFragment).commit();
-		mContent = phoneFragment;
+		transaction.add(R.id.main_fragment, accountFragment).commit();
+		mContent = accountFragment;
 
 
 		//获取验证码按钮点击时间
-		phoneFragment.setTimeButtonClickListener(new RegisterByPhoneFragment.OnViewClickListener() {
+		accountFragment.setTimeButtonClickListener(new RegisterByAccountFragment.OnViewClickListener() {
 			@Override
 			public void onClick(View v, int type) {
 				getAuthCode();
@@ -190,8 +190,8 @@ public class RegisterActivity extends BaseActivity {
 			@Override
 			public void onVerifySuccess() {
 				//验证成功后才开始倒计时
-				phoneFragment.startClock();
-				sendVerifyCode(phoneFragment.getAccount(), phoneFragment.getType());
+				accountFragment.startClock();
+				sendVerifyCode(accountFragment.getAccount(), accountFragment.getType());
 			}
 
 			@Override
@@ -231,7 +231,7 @@ public class RegisterActivity extends BaseActivity {
 							break;
 						case 682:
 						case 402:
-							phoneFragment.endClock();
+							accountFragment.endClock();
 						default:
 							sDialog("提示", StatusEnum.getValue(response.getCode()));
 							break;
@@ -246,11 +246,11 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void verifyCode() {
-		int type = phoneFragment.getType();
+		int type = accountFragment.getType();
 		if (type == 1) {
 			sToast("手机注册功能暂未开通");
 		} else if (type == 2) {
-			submitEmailCode(phoneFragment.getAccount(), phoneFragment.getCode());
+			submitEmailCode(accountFragment.getAccount(), accountFragment.getCode());
 		}
 	}
 
@@ -291,7 +291,7 @@ public class RegisterActivity extends BaseActivity {
 	 */
 	private void submit() {
 
-		int type = phoneFragment.getType();
+		int type = accountFragment.getType();
 		if (type == 1) {
 			register("phone");
 		} else if (type == 2) {
@@ -336,7 +336,7 @@ public class RegisterActivity extends BaseActivity {
 										@Override
 										public void onClick(TipsDialog dialog) {
 											dialog.dismiss();
-											phoneFragment.cleanAll();
+											accountFragment.cleanAll();
 											Intent intent = new Intent();
 											intent.putExtra("userAccount", userAccount);
 											setResult(0x4321, intent);

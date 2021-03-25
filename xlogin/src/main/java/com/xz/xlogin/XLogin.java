@@ -75,8 +75,6 @@ public class XLogin {
 					token = RSAUtil.publicDecrypt(rsaToken, RSAUtil.getPublicKey(Macroelement.localPublicKey));
 					UserApi api = UserApi.getInstance();
 					//注销接口
-					Logger.w("账号：" + user);
-					Logger.w("token：" + token);
 					api.logout(user, token);
 					//删除自动登录文件
 					delete(context, TAG_USER);
