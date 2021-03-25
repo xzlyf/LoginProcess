@@ -2,6 +2,8 @@ package com.xz.xlogin.api;
 
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
 import com.orhanobut.logger.Logger;
 import com.xz.utils.appUtils.StringUtil;
 import com.xz.utils.encodUtils.MD5Util;
@@ -46,16 +48,15 @@ public class UserApi {
 
 	/**
 	 * 获取用户条例地址
-	 *
 	 */
 	public String getUserRules() {
-		return Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE+"?appId="+Macroelement.appId;
+		return Macroelement.BASE_URL_INFO + Macroelement.GET_USER_RULE + "?appId=" + Macroelement.appId;
 	}
 
 	/**
 	 * 手机注册
 	 */
-	public void phoneRegister(String phone, String pwd, NetUtil.ResultCallback<String> callback) {
+	public void register(String phone, String pwd, @NonNull String type, NetUtil.ResultCallback<String> callback) {
 
 		Map<String, Object> params = new HashMap<>();
 		try {
@@ -69,7 +70,7 @@ public class UserApi {
 			return;
 		}
 		params.put("cert", phone);
-		params.put("type", "phone");
+		params.put("type", type);
 		params.put("t", System.currentTimeMillis());
 		params.put("st", MD5Util.getMD5(String.valueOf(Math.random())));
 		netUtil.post(Macroelement.BASE_URL_USER + Macroelement.GET_REGISTER, params, callback);

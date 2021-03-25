@@ -19,12 +19,8 @@ import com.xz.xlogin.base.BaseFragment;
  */
 public class RegisterByPwdFragment extends BaseFragment {
 
-	//密码不符合规范
-	private boolean isNotFit = false;
 	private EditText etPwd;
 	private ImageView alterPwd;
-	private EditText etRepeatPwd;
-	private ImageView alter2;
 	private TextView tvTips;
 
 	@Override
@@ -36,38 +32,23 @@ public class RegisterByPwdFragment extends BaseFragment {
 	protected void initView(View rootView) {
 		etPwd = rootView.findViewById(R.id.et_pwd);
 		alterPwd = rootView.findViewById(R.id.alter_pwd);
-		etRepeatPwd = rootView.findViewById(R.id.et_repeat_pwd);
-		alter2 = rootView.findViewById(R.id.alter_2);
 		tvTips = rootView.findViewById(R.id.tv_tips);
 	}
 
 	@Override
 	protected void initDate(Context mContext) {
-		etPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (!hasFocus) {
-					if (!etRepeatPwd.getText().toString().equals("")) {
-						sensePwd();
-					}
-				}
-			}
-		});
-		etRepeatPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (!hasFocus) {
-					if (!etPwd.getText().toString().equals("")) {
-						sensePwd();
-					}
-				}
-			}
-		});
 		alterPwd.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setPasswordEye(etPwd);
-				setPasswordEye(etRepeatPwd);
+			}
+		});
+		etPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					setNormalState(etPwd);
+				}
 			}
 		});
 	}
@@ -93,24 +74,7 @@ public class RegisterByPwdFragment extends BaseFragment {
 
 
 	/**
-	 * 判断两次密码是否一致
-	 */
-	private void sensePwd() {
-		if (!etRepeatPwd.getText().toString().equals(etPwd.getText().toString())) {
-			setErrorState(etRepeatPwd);
-			setErrorState(etPwd);
-			isNotFit = true;
-		} else {
-			setNormalState(etRepeatPwd);
-			setNormalState(etPwd);
-			isNotFit = false;
-		}
-	}
-
-	/**
 	 * 设置view默认状态
-	 *
-	 * @param view
 	 */
 	private void setNormalState(View view) {
 		view.setBackgroundResource(R.drawable.select_edit);
@@ -118,8 +82,6 @@ public class RegisterByPwdFragment extends BaseFragment {
 
 	/**
 	 * 设置view错误状态
-	 *
-	 * @param view
 	 */
 	private void setErrorState(View view) {
 		view.setBackgroundResource(R.drawable.select_edit_error);
@@ -130,41 +92,30 @@ public class RegisterByPwdFragment extends BaseFragment {
 	 */
 
 	public String getPwd() {
-
-		if (isNotFit) {
-			setErrorState(etRepeatPwd);
-			setErrorState(etPwd);
-			tvTips.setText("两处密码不一致");
-			return "";
-		} else {
-			tvTips.setText("");
-		}
-
 		String pwd = etPwd.getText().toString().trim();
-		String rePwd = etRepeatPwd.getText().toString().trim();
 		if (pwd.equals("")) {
 			setErrorState(etPwd);
 			return "";
 		}
-
-		if (rePwd.equals("")) {
-			setErrorState(etRepeatPwd);
-			return "";
-		}
-		if (rePwd.length() < 6) {
-			setErrorState(etRepeatPwd);
+		if (pwd.length() < 6) {
 			setErrorState(etPwd);
-			tvTips.setText("密码长度不可以小于6位");
+			setTips("密码强度若，密码不可少于6位");
+			return "";
+		} else if (pwd.length() > 16) {
+			setErrorState(etPwd);
+			setTips("密码过长");
 			return "";
 		}
+		return pwd;
+	}
 
-
-		return etRepeatPwd.getText().toString().trim();
+	public void setTips(String msg) {
+		tvTips.setText(msg);
 	}
 
 	public void cleanAll() {
 		etPwd.setText("");
-		etRepeatPwd.setText("");
+		tvTips.setText("");
 	}
 
 }

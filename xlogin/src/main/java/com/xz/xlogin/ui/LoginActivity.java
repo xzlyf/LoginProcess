@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.xz.utils.appUtils.ViewUtil;
+import androidx.annotation.Nullable;
+
 import com.xz.xlogin.R;
 import com.xz.xlogin.XLogin;
 import com.xz.xlogin.api.UserApi;
@@ -122,7 +123,7 @@ public class LoginActivity extends BaseActivity {
 			login(etUser.getText().toString().trim(), etPwd.getText().toString().trim(), TYPE_PHONE);
 		} else if (id == R.id.tv_register) {
 			//跳转至注册页面
-			startActivity(new Intent(mContext, RegisterActivity.class));
+			startActivityForResult(new Intent(mContext, RegisterActivity.class), 0x1234);
 			overridePendingTransition(R.anim.activity_show, R.anim.activity_hide);
 		}
 	}
@@ -213,6 +214,16 @@ public class LoginActivity extends BaseActivity {
 
 	}
 
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 0x1234 && resultCode == 0x4321) {
+			if (data != null) {
+				etUser.setText(data.getStringExtra("userAccount"));
+			}
+		}
+	}
 
 	@Override
 	protected void onDestroy() {

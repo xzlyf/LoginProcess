@@ -22,7 +22,6 @@ import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.ui.fragment.RegisterByPhoneFragment;
 import com.xz.xlogin.ui.fragment.RegisterByPwdFragment;
 import com.xz.xlogin.util.ColorUtil;
-import com.xz.xlogin.util.RegexUtil;
 import com.xz.xlogin.util.TipsDialogUtil;
 import com.xz.xlogin.widget.TipsDialog;
 import com.xz.xlogin.widget.VerificationDialog;
@@ -44,6 +43,9 @@ public class RegisterActivity extends BaseActivity {
 	private CheckBox boxProtocol;
 	private TextView tvProtocol;
 	private TextView btnSubmit;
+	private String userAccount = "";
+	private String userPwd = "";
+	private int page = 1;//1账号输入fragment 2密码输入fragment
 
 	@Override
 	public boolean homeAsUpEnabled() {
@@ -77,7 +79,11 @@ public class RegisterActivity extends BaseActivity {
 		btnSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				submitEmailCode(phoneFragment.getAccount(), phoneFragment.getCode());
+				if (page == 1) {
+					verifyCode();
+				} else if (page == 2) {
+					submit();
+				}
 			}
 		});
 		tvProtocol.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +98,7 @@ public class RegisterActivity extends BaseActivity {
 		getProtocol();
 
 	}
+
 
 	/**
 	 * 注册与使用协议
@@ -238,6 +245,15 @@ public class RegisterActivity extends BaseActivity {
 
 	}
 
+	private void verifyCode() {
+		int type = phoneFragment.getType();
+		if (type == 1) {
+			sToast("手机注册功能暂未开通");
+		} else if (type == 2) {
+			submitEmailCode(phoneFragment.getAccount(), phoneFragment.getCode());
+		}
+	}
+
 	/**
 	 * 验证邮箱验证码
 	 */
@@ -257,6 +273,9 @@ public class RegisterActivity extends BaseActivity {
 				switch (response.getCode()) {
 					case 1:
 						//验证成功，让用户设置密码
+						page = 2;
+						userAccount = email;
+						btnSubmit.setText("注册");
 						showFragment(pwdFragment);
 						break;
 					default:
@@ -267,23 +286,36 @@ public class RegisterActivity extends BaseActivity {
 		});
 	}
 
+	/**
+	 * 提交注册
+	 */
+	private void submit() {
+
+		int type = phoneFragment.getType();
+		if (type == 1) {
+			register("phone");
+		} else if (type == 2) {
+			register("email");
+		}
+
+	}
 
 	/**
-	 * 手机号注册
+	 * 注册请求
+	 *
+	 * @param type phone 手机注册 email邮箱诸恶
 	 */
-	private void phoneRegister() {
-		final String phone = phoneFragment.getAccount();
-		final String pwd = pwdFragment.getPwd();
-		if (phone.equals("") || pwd.equals("")) {
+	private void register(String type) {
+		userPwd = pwdFragment.getPwd();
+		if (userPwd.equals("")) {
 			return;
 		}
-		showLoading("正在加载...", false, null);
-		userApi.phoneRegister(phone, pwd, new NetUtil.ResultCallback<String>() {
+		showLoading("正在处理...");
+		userApi.register(userAccount, userPwd, "email", new NetUtil.ResultCallback<String>() {
 			@Override
 			public void onError(Request request, Exception e) {
 				disLoading();
 				TipsDialogUtil.badNetDialog(mContext);
-
 			}
 
 			@Override
@@ -305,7 +337,10 @@ public class RegisterActivity extends BaseActivity {
 										public void onClick(TipsDialog dialog) {
 											dialog.dismiss();
 											phoneFragment.cleanAll();
-
+											Intent intent = new Intent();
+											intent.putExtra("userAccount", userAccount);
+											setResult(0x4321, intent);
+											finish();
 										}
 									})
 									.build()
@@ -348,6 +383,7 @@ public class RegisterActivity extends BaseActivity {
 
 			}
 		});
+
 	}
 
 
