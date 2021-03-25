@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.api.CommonApi;
 import com.xz.xlogin.base.BaseDialog;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
+
+import java.util.logging.Logger;
 
 import okhttp3.Request;
 
@@ -127,7 +128,7 @@ public class VerificationDialog extends BaseDialog {
 			@Override
 			public void error(Exception e) {
 				isLoading = false;
-				Logger.e("验证码请求失败");
+				System.out.println("GET CODE ERR");
 			}
 		});
 

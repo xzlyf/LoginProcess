@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
 import com.xz.xlogin.api.CommonApi;
 import com.xz.xlogin.api.UserApi;
@@ -28,6 +27,8 @@ import com.xz.xlogin.widget.VerificationDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.logging.Logger;
 
 import okhttp3.Request;
 
@@ -218,13 +219,11 @@ public class RegisterActivity extends BaseActivity {
 			commonApi.getEmailCode(email, new NetUtil.ResultCallback<ApiResult>() {
 				@Override
 				public void onError(Request request, Exception e) {
-					Logger.w(e.getMessage());
 					sDialog("异常了", "当前网络异常请稍后重试");
 				}
 
 				@Override
 				public void onResponse(ApiResult response) {
-					Logger.d("状态码：" + response.getCode());
 					switch (response.getCode()) {
 						case 1:
 							sToast("发送成功，请检查邮箱");
@@ -263,7 +262,6 @@ public class RegisterActivity extends BaseActivity {
 			@Override
 			public void onError(Request request, Exception e) {
 				disLoading();
-				Logger.w(e.getMessage());
 				sDialog("异常了", "当前网络异常请稍后重试");
 			}
 
@@ -320,7 +318,6 @@ public class RegisterActivity extends BaseActivity {
 
 			@Override
 			public void onResponse(String response) {
-				Logger.w(response);
 				disLoading();
 				try {
 					JSONObject obj = new JSONObject(response);

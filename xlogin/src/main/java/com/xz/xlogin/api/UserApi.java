@@ -1,10 +1,7 @@
 package com.xz.xlogin.api;
 
-import android.os.SystemClock;
-
 import androidx.annotation.NonNull;
 
-import com.orhanobut.logger.Logger;
 import com.xz.utils.appUtils.StringUtil;
 import com.xz.utils.encodUtils.MD5Util;
 import com.xz.xlogin.constant.Macroelement;
@@ -12,11 +9,13 @@ import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.util.RSAUtil;
+import com.xz.xlogin.util.apache.codes.language.Soundex;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import okhttp3.Request;
 
@@ -65,7 +64,7 @@ public class UserApi {
 
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
-			Logger.e("RSA运算错误");
+			System.out.println("RSA operation Err");
 			callback.onError(null, e);
 			return;
 		}
@@ -94,7 +93,7 @@ public class UserApi {
 			params.put("pwd", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
-			Logger.e("RSA运算错误");
+			System.out.println("RSA operation Err");
 			callback.onError(null, e);
 			return;
 		}
@@ -118,7 +117,7 @@ public class UserApi {
 			@Override
 			public void onResponse(ApiResult<String> response) {
 				//不管是否正确的token都可以注销
-				Logger.w("注销提示：" + StatusEnum.getValue(response.getCode()));
+				System.out.println("logout");
 			}
 		});
 

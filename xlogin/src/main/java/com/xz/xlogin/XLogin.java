@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.orhanobut.logger.Logger;
 import com.xz.utils.fileUtils.StorageUtil;
 import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.constant.Macroelement;
@@ -18,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * @author czr
@@ -33,7 +33,7 @@ public class XLogin {
 
 	public static void init(XLoginBuilder builder) {
 		if (builder.isLog) {
-			log(builder.logTag);
+			//todo 日志系统开发
 		}
 		Macroelement.appId = builder.appId;
 		Macroelement.appSecret = builder.appSecret;
@@ -86,11 +86,6 @@ public class XLogin {
 	}
 
 
-	private static void log(String tag) {
-		Logger.init(tag)    //LOG TAG默认是PRETTYLOGGER
-				.methodCount(2)                 // 决定打印多少行（每一行代表一个方法）默认：2
-				.methodOffset(0);
-	}
 
 	private static boolean delete(Context context, String child) {
 		String path = StorageUtil.getDataDir(context);

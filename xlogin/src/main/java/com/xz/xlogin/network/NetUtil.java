@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.internal.$Gson$Types;
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.constant.Macroelement;
 import com.xz.xlogin.util.DateFormat;
 
@@ -27,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -290,7 +290,6 @@ public class NetUtil {
 		call.enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
-				Logger.e("deliveryResult = " + e.getMessage());
 				if (e.toString().contains("closed") || e.toString().contains("Canceled")) {
 					//如果是主动取消的情况下
 				} else {

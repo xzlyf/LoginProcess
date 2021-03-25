@@ -16,8 +16,9 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.orhanobut.logger.Logger;
 import com.xz.xlogin.R;
+
+import java.util.logging.Logger;
 
 
 public class WebActivity extends AppCompatActivity {
@@ -145,7 +146,6 @@ public class WebActivity extends AppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		Logger.d("是否能返回：" + webView.canGoBack());
 		if (webView.canGoBack()) {
 			webView.goBack();
 			return;
