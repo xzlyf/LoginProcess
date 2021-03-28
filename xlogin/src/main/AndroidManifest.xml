@@ -9,6 +9,7 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         tools:replace="android:allowBackup">
+        <activity android:name=".ui.ResetActivity"></activity>
         <activity
             android:name=".ui.RegisterActivity"
             android:launchMode="singleInstance"

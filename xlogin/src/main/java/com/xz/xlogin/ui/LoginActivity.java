@@ -138,6 +138,11 @@ public class LoginActivity extends BaseActivity {
 			//跳转至注册页面
 			startActivityForResult(new Intent(mContext, RegisterActivity.class), 0x1234);
 			overridePendingTransition(R.anim.activity_show, R.anim.activity_hide);
+		} else if (id == R.id.tv_forget) {
+			//充值密码页面
+			startActivity(new Intent(mContext, ResetActivity.class));
+			overridePendingTransition(R.anim.activity_show, R.anim.activity_hide);
+
 		}
 	}
 
