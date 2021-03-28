@@ -16,6 +16,7 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
@@ -34,7 +35,7 @@ public class CommonApi {
 	private NetUtil netUtil;
 	private OkHttpClient client;
 
-	private static String sessionId = null;
+	private String sessionId = null;
 
 	private CommonApi() {
 		netUtil = NetUtil.getInstance();
@@ -64,7 +65,6 @@ public class CommonApi {
 					.build();
 		} else {
 			request = new Request.Builder()
-					.header("Cookie", sessionId)
 					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_IMG)
 					.build();
 		}
@@ -84,10 +84,10 @@ public class CommonApi {
 				}
 
 				//获取这次请求的会话id，保证验证时候是同一个会话
-				//if (sessionId == null) {
-				Headers headers = response.headers();
-				sessionId = netUtil.getSessionId(headers);
-				//}
+				if (sessionId == null) {
+					Headers headers = response.headers();
+					sessionId = netUtil.getSessionId(headers);
+				}
 				Bitmap bmp = null;
 				InputStream is = response.body().byteStream();
 				bmp = BitmapFactory.decodeStream(is);
@@ -110,13 +110,10 @@ public class CommonApi {
 					.build();
 		} else {
 			request = new Request.Builder()
-					.header("Cookie", sessionId)
 					.url(Macroelement.BASE_URL_APP + Macroelement.GET_VERIFY_CODE + "?code=" + code)
 					.build();
 		}
-
 		netUtil.custom_request(request, callback);
-
 	}
 
 

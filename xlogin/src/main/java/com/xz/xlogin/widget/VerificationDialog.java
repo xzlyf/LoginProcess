@@ -201,6 +201,11 @@ public class VerificationDialog extends BaseDialog {
 		this.mCallback = callback;
 	}
 
+	public void refreshCode(){
+		loadImg();
+		etCode.setText("");
+	}
+
 
 	public interface VerifyStatusCallback {
 		//打开对话框

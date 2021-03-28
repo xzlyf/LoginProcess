@@ -167,11 +167,18 @@ public class RegisterActivity extends BaseActivity {
 
 	}
 
+	private VerificationDialog dialog;
+
 	/**
 	 * 显示验证码对话框
 	 */
 	private void showVerificationDialog() {
-		VerificationDialog dialog = new VerificationDialog(mContext);
+		if (dialog != null) {
+			dialog.show();
+			dialog.refreshCode();
+			return;
+		}
+		dialog = new VerificationDialog(mContext);
 		dialog.setVerifyStatusCallbackListener(new VerificationDialog.VerifyStatusCallback() {
 			@Override
 			public void onStartVerify() {
