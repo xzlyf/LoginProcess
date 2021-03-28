@@ -16,7 +16,6 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Cookie;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
@@ -35,7 +34,7 @@ public class CommonApi {
 	private NetUtil netUtil;
 	private OkHttpClient client;
 
-	private String sessionId = null;
+	private String sessionId = "null";
 
 	private CommonApi() {
 		netUtil = NetUtil.getInstance();
