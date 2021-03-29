@@ -9,6 +9,7 @@ import okhttp3.HttpUrl;
 
 /**
  * cooKie持久化存储
+ * 解决方案来自：https://www.jianshu.com/p/f1df12ceaedc
  */
 public class PersistenceCookieJar implements CookieJar {
 

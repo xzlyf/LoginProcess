@@ -28,8 +28,6 @@ import com.xz.xlogin.widget.VerificationDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.logging.Logger;
-
 import okhttp3.Request;
 
 public class RegisterActivity extends BaseActivity {
@@ -223,7 +221,7 @@ public class RegisterActivity extends BaseActivity {
 		if (type == 1) {
 			sToast("手机注册暂时未开放");
 		} else if (type == 2) {
-			commonApi.getEmailCode(email, new NetUtil.ResultCallback<ApiResult>() {
+			commonApi.getEmailCode(email, "register",new NetUtil.ResultCallback<ApiResult>() {
 				@Override
 				public void onError(Request request, Exception e) {
 					sDialog("异常了", "当前网络异常请稍后重试");
@@ -316,7 +314,7 @@ public class RegisterActivity extends BaseActivity {
 			return;
 		}
 		showLoading("正在处理...");
-		userApi.register(userAccount, userPwd, "email", new NetUtil.ResultCallback<String>() {
+		userApi.register(userAccount, userPwd, type, new NetUtil.ResultCallback<String>() {
 			@Override
 			public void onError(Request request, Exception e) {
 				disLoading();

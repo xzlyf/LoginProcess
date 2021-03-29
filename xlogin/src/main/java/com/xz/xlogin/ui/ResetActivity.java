@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xz.xlogin.R;
 import com.xz.xlogin.api.CommonApi;
+import com.xz.xlogin.api.UserApi;
 import com.xz.xlogin.base.BaseActivity;
 import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
@@ -31,10 +32,11 @@ public class ResetActivity extends BaseActivity {
 	private EditText etPwd;
 	private TimeButton btnTime;
 
-
+	private UserApi userApi;
 	private CommonApi commonApi;
 	private int mType = -1; //1手机号 2邮箱号
 	private String mAccount;
+	private String mPwd;
 
 	@Override
 	public boolean homeAsUpEnabled() {
@@ -55,6 +57,7 @@ public class ResetActivity extends BaseActivity {
 		changeStatusBarTextColor();
 		initView();
 		commonApi = CommonApi.getInstance();
+		userApi = UserApi.getInstance();
 	}
 
 	private void initView() {
@@ -62,6 +65,7 @@ public class ResetActivity extends BaseActivity {
 		selectPhone = findViewById(R.id.select_phone);
 		selectEmail = findViewById(R.id.select_email);
 		btnSubmit = findViewById(R.id.btn_submit);
+		btnSubmit.setOnClickListener(onSubmitClick);
 		layoutSelect.setVisibility(View.VISIBLE);
 		btnSubmit.setVisibility(View.INVISIBLE);
 		btnSubmit.setEnabled(false);
@@ -90,6 +94,14 @@ public class ResetActivity extends BaseActivity {
 			etAccount.setHint("邮箱号");
 		}
 	}
+
+	private View.OnClickListener onSubmitClick = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			submit();
+		}
+	};
+
 
 	private View.OnClickListener onSelectViewClick = new View.OnClickListener() {
 		@Override
@@ -139,6 +151,7 @@ public class ResetActivity extends BaseActivity {
 	};
 
 	private VerificationDialog dialog;
+
 	/**
 	 * 显示验证码对话框
 	 */
@@ -193,7 +206,7 @@ public class ResetActivity extends BaseActivity {
 		if (type == 1) {
 			sToast("手机注册暂时未开放");
 		} else if (type == 2) {
-			commonApi.getEmailCode(account, new NetUtil.ResultCallback<ApiResult>() {
+			commonApi.getEmailCode(account, "reset", new NetUtil.ResultCallback<ApiResult>() {
 				@Override
 				public void onError(Request request, Exception e) {
 					sDialog("异常了", "当前网络异常请稍后重试");
@@ -220,6 +233,24 @@ public class ResetActivity extends BaseActivity {
 
 
 	}
+
+	private void submit() {
+		showLoading("正在处理...");
+		mPwd = etPwd.getText().toString().trim();
+		if (mPwd.equals("")) {
+			return;
+		}
+		if (mPwd.length() < 6) {
+			sToast("密码强度若，密码不可少于6位");
+			return;
+		} else if (mPwd.length() > 16) {
+			sToast("密码过长");
+			return;
+		}
+
+
+	}
+
 
 	public void finish() {
 		super.finish();

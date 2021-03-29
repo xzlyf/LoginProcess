@@ -152,10 +152,13 @@ public class CommonApi {
 
 	/**
 	 * 向服务器请求邮箱验证码发送
+	 *
+	 * @param type register 注册 reset 重置密码
 	 */
-	public void getEmailCode(String email, NetUtil.ResultCallback<ApiResult> callback) {
+	public void getEmailCode(String email, String type, NetUtil.ResultCallback<ApiResult> callback) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("email", email);
+		params.put("type", type);
 		//填装body
 		FormBody.Builder builder = new FormBody.Builder();
 		for (Map.Entry<String, Object> entry : params.entrySet()) {

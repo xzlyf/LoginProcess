@@ -99,6 +99,13 @@ public class UserApi {
 	}
 
 	/**
+	 * 重置密码
+	 */
+	public void reset() {
+		// TODO: 2021/3/29 完善重置密码接口 
+	}
+
+	/**
 	 * 注销登录
 	 */
 	public void logout(String userNo, String token) {
