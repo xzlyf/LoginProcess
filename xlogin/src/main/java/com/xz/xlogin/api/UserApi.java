@@ -101,8 +101,32 @@ public class UserApi {
 	/**
 	 * 重置密码
 	 */
-	public void reset() {
-		// TODO: 2021/3/29 完善重置密码接口 
+	public void reset(String account, String pwd, int type, String code, NetUtil.ResultCallback<ApiResult> callback) {
+		long timestamp = System.currentTimeMillis();
+		Map<String, Object> params = new HashMap<>();
+		params.put("cert", account);
+		try {
+			//密码规则=明文密码+时间戳
+			//params.put("pwd", RSAUtil.publicEncrypt(pwd + timestamp, RSAUtil.getPublicKey(Macroelement.publicKey)));
+			params.put("pwd", RSAUtil.publicEncrypt(pwd, RSAUtil.getPublicKey(Macroelement.publicKey)));
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+			System.out.println("RSA operation Err");
+			callback.onError(null, e);
+			return;
+		}
+		if (type == 1) {
+			params.put("type", "phone");
+		} else if (type == 2) {
+			params.put("type", "email");
+		} else {
+			return;
+		}
+		params.put("code", code);
+		params.put("t", timestamp);
+		params.put("st", StringUtil.getRandomString(8));
+		netUtil.post(timestamp, Macroelement.BASE_URL_USER + Macroelement.GET_RESET, params, callback);
+
 	}
 
 	/**

@@ -30,6 +30,7 @@ public class Macroelement {
 	public static final String GET_REGISTER = "/register";//注册
 	public static final String GET_LOGIN = "/login";//登录
 	public static final String GET_LOGOUT = "/logout";//注销
+	public static final String GET_RESET = "/reset";//重置密码
 
 	public static String appId;
 	public static String appSecret;

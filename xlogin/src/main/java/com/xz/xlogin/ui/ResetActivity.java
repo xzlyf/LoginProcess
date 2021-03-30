@@ -1,7 +1,10 @@
 package com.xz.xlogin.ui;
 
 import android.graphics.Color;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,7 +18,9 @@ import com.xz.xlogin.entity.ApiResult;
 import com.xz.xlogin.network.NetUtil;
 import com.xz.xlogin.network.StatusEnum;
 import com.xz.xlogin.util.RegexUtil;
+import com.xz.xlogin.util.TipsDialogUtil;
 import com.xz.xlogin.widget.TimeButton;
+import com.xz.xlogin.widget.TipsDialog;
 import com.xz.xlogin.widget.VerificationDialog;
 
 import okhttp3.Request;
@@ -30,6 +35,7 @@ public class ResetActivity extends BaseActivity {
 	private EditText etAccount;
 	private EditText etCode;
 	private EditText etPwd;
+	private ImageView alterPwd;
 	private TimeButton btnTime;
 
 	private UserApi userApi;
@@ -76,10 +82,37 @@ public class ResetActivity extends BaseActivity {
 		etAccount = findViewById(R.id.et_account);
 		etCode = findViewById(R.id.et_code);
 		etPwd = findViewById(R.id.et_pwd);
+		alterPwd = findViewById(R.id.alter_pwd);
 		btnTime = findViewById(R.id.btn_time);
 		btnTime.setOnClickListener(onTimeClick);
 		layoutInput.setVisibility(View.GONE);
 
+		alterPwd.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setPasswordEye(etPwd);
+			}
+		});
+
+	}
+
+	/**
+	 * 设置密码可见和不可见
+	 */
+	private void setPasswordEye(EditText editText) {
+		if (EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD == editText.getInputType()) {
+			//如果不可见就设置为可见
+			editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+			editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+			alterPwd.setImageResource(R.mipmap.ic_invisible);
+		} else {
+			//如果可见就设置为不可见
+			editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+			alterPwd.setImageResource(R.mipmap.ic_visible);
+		}
+		//执行上面的代码后光标会处于输入框的最前方,所以把光标位置挪到文字的最后面
+		editText.setSelection(editText.getText().toString().length());
 	}
 
 	private void inputLayout() {
@@ -247,7 +280,42 @@ public class ResetActivity extends BaseActivity {
 			sToast("密码过长");
 			return;
 		}
+		String code = etCode.getText().toString().trim();
+		if (code.equals("")) {
+			sToast("请输入验证码");
+			return;
+		}
 
+		userApi.reset(mAccount, mPwd, mType, code, new NetUtil.ResultCallback<ApiResult>() {
+			@Override
+			public void onError(Request request, Exception e) {
+				disLoading();
+				TipsDialogUtil.badNetDialog(mContext);
+			}
+
+			@Override
+			public void onResponse(ApiResult response) {
+				disLoading();
+				if (response.getCode() == 1) {
+					new TipsDialog.Builder(mContext)
+							.setType(TipsDialog.STYLE_SUCCESS)
+							.setContent("密码修改成功")
+							.setSubmitText("前往登录")
+							.setOnSubmitListener(new TipsDialog.OnSubmitListener() {
+								@Override
+								public void onClick(TipsDialog dialog) {
+									dialog.dismiss();
+									finish();
+								}
+							})
+							.build()
+							.show();
+				} else {
+					TipsDialogUtil.commonDialogV2(mContext, response.getStatus());
+				}
+
+			}
+		});
 
 	}
 
