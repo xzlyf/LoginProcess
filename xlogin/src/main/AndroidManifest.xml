@@ -7,9 +7,10 @@
 
     <application
         android:allowBackup="false"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".ui.ResetActivity"></activity>
+        <activity android:name=".ui.ResetActivity" />
         <activity
             android:name=".ui.RegisterActivity"
             android:launchMode="singleInstance"
