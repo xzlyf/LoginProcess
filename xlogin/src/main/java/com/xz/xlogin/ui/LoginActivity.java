@@ -26,7 +26,6 @@ import okhttp3.Request;
 
 public class LoginActivity extends BaseActivity {
 
-	private String userRuleUrl;
 	private UserApi userApi;
 	private TextView btnSubmit;
 	private EditText etUser;

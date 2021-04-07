@@ -402,7 +402,7 @@ public class NetUtil {
 				.addHeader("appid", Macroelement.appId)
 				.addHeader("timestamp", String.valueOf(timestamp))
 				.addHeader("version", Macroelement.version)
-				.addHeader("sign", SecretUtil.getSecret(timestamp))
+				.addHeader("sign", SecretUtil.getSign(params))
 				.url(attachHttpGetParams(url, params, true))
 				.build();
 	}
@@ -423,7 +423,7 @@ public class NetUtil {
 				.addHeader("appid", Macroelement.appId)
 				.addHeader("timestamp", String.valueOf(timestamp))
 				.addHeader("version", Macroelement.version)
-				.addHeader("sign", SecretUtil.getSecret(timestamp))
+				.addHeader("sign", SecretUtil.getSign(params))
 				.url(url)
 				.post(requestBody)
 				.build();

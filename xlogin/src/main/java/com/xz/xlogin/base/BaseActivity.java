@@ -156,6 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
 		tipsDialog = new TipsDialog.Builder(mContext)
 				.setTitle(title)
 				.setContent(msg)
+				.setSubmitText("确定")
 				.setType(TipsDialog.STYLE_GENERAL)
 				.build();
 		tipsDialog.show();
