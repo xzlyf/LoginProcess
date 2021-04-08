@@ -26,7 +26,7 @@ public class SecretUtil {
 	/**
 	 * 2.0 sign加密
 	 * 规则：根据key的ANSI码从小到大排序得到
-	 * MD5(AppId+Key=Value+Key=Value...+Key=Value+AppSecret+ServerVersion)
+	 * MD5(AppId+Key=Value+Key=Value...+Key=Value+AppSecret)
 	 * （+号 =号 省略）
 	 */
 	public static String getSign(Map<String, Object> params) {
@@ -38,7 +38,6 @@ public class SecretUtil {
 			sb.append(newParams.get(key));
 		}
 		sb.append(Macroelement.appSecret);
-		sb.append(Macroelement.version);
 		return MD5Util.getMD5(sb.toString());
 	}
 
