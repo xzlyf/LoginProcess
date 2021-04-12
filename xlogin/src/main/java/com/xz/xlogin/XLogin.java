@@ -25,6 +25,8 @@ public class XLogin {
 
 	public static final int REQUEST_CODE = 0x0001212;
 	public static final String EXTRA_TOKEN = "token";
+	public static final String EXTRA_USER= "user";
+	public static final String EXTRA_TYPE = "type";
 	public static final String TAG_TOKEN = "token";
 	public static final String TAG_USER = "user";
 	private static UserApi api;

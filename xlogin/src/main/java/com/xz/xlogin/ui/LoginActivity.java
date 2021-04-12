@@ -176,7 +176,8 @@ public class LoginActivity extends BaseActivity {
 	 * 手机号密码登录
 	 */
 	private void login(String user, String password, String type) {
-		Macroelement.user = user;
+		Macroelement.mUser = user;
+		Macroelement.mType = type;
 		if (user.equals("") || password.equals("")) {
 			return;
 		}
@@ -199,11 +200,13 @@ public class LoginActivity extends BaseActivity {
 					int code = obj.optInt("code", -1);
 					switch (code) {
 						case 1:
-							Macroelement.token = obj.optString("data");
-							XLogin.save(mContext, XLogin.TAG_TOKEN, Macroelement.token);
-							XLogin.save(mContext, XLogin.TAG_USER, Macroelement.user);
+							Macroelement.mToken = obj.optString("data");
+							XLogin.save(mContext, XLogin.TAG_TOKEN, Macroelement.mToken);
+							XLogin.save(mContext, XLogin.TAG_USER, Macroelement.mUser);
 							Intent intent = new Intent();
-							intent.putExtra(XLogin.EXTRA_TOKEN, Macroelement.token);
+							intent.putExtra(XLogin.EXTRA_TOKEN, Macroelement.mToken);
+							intent.putExtra(XLogin.EXTRA_USER, Macroelement.mUser);
+							intent.putExtra(XLogin.EXTRA_TYPE, Macroelement.mType);
 							setResult(RESULT_OK, intent);
 							finish();
 							break;
@@ -239,7 +242,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		if (Macroelement.token == null) {
+		if (Macroelement.mToken == null) {
 			setResult(RESULT_CANCELED);
 		}
 		super.onDestroy();
