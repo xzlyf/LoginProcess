@@ -36,13 +36,21 @@ public class MainActivity extends AppCompatActivity {
 		 * 初始化
 		 * ！！！记得要初始化！！！
 		 */
+		//XLogin.init(new Config()
+		//		.log("xzlyf")
+		//		.appId("4MakRN8juW8c6Hii4lTl0rt84JDH22c9")
+		//		.appSecret("OoLZs7vHPEPsr9YtZtnLY7My2W2RiwTk")
+		//		.serverVersion("1.0")
+		//		.server("http://192.168.1.66:8080")
+		//		.publicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCt5OvgZD9ZuncevvfIMeJU0AiDK01bnMoL9BUhHrf5netVR_ZZ3xNhSDZFlA-wfHiiMMZnUqxsQPBKs8J-zwff-yaYTdg3pvHgsfSePH-_ZIo_bH3meO-_s6l2F0Qqp4pXP7P7lGAI73rYfEAfKiwK79c042PMQdOLYGGnMsB6RwIDAQAB"));
 		XLogin.init(new Config()
 				.log("xzlyf")
 				.appId("4MakRN8juW8c6Hii4lTl0rt84JDH22c9")
 				.appSecret("OoLZs7vHPEPsr9YtZtnLY7My2W2RiwTk")
 				.serverVersion("1.0")
-				.server("http://192.168.1.66:8080")
+				.server("http://106.55.150.181/xlogin/")
 				.publicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCt5OvgZD9ZuncevvfIMeJU0AiDK01bnMoL9BUhHrf5netVR_ZZ3xNhSDZFlA-wfHiiMMZnUqxsQPBKs8J-zwff-yaYTdg3pvHgsfSePH-_ZIo_bH3meO-_s6l2F0Qqp4pXP7P7lGAI73rYfEAfKiwK79c042PMQdOLYGGnMsB6RwIDAQAB"));
+
 		/*
 		 *调用登录程序
 		 */
